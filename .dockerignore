@@ -1,0 +1,7 @@
+config
+venv
+Dockerfile
+docker-compose.yml
+setup.sh
+.git
+*.db
