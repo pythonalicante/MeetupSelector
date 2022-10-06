@@ -1,12 +1,12 @@
 Django
 psycopg2-binary==2.9.3
-decouple==0.0.7
 gunicorn==20.1.0
 django-cors-headers==3.11.0
 uritemplate==4.1.1
 django-filter==22.1
 pyyaml
 toml
+python-decouple
 # Backgroud
 redis==4.3.1
 celery==5.2.0
