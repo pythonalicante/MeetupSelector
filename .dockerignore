@@ -1,7 +1,6 @@
 config
 venv
-Dockerfile
+dockerfiles/Dockerfile
 docker-compose.yml
-setup.sh
 .git
 *.db
