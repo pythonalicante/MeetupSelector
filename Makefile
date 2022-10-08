@@ -46,8 +46,12 @@ logs:
 createsuperuser:
 	${PRE_RUN_API_COMMAND} createsuperuser
 
-
 # target: test - test code
 .PHONY: test
 test:
-	${PRE_RUN_API_COMMAND} pytest
+	${PRE_RUN_API_COMMAND} test
+
+# target: lint - Lint the code
+.PHONY: lint
+lint:
+	${PRE_RUN_API_COMMAND} lint
