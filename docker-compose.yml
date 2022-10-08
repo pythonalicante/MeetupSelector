@@ -14,6 +14,8 @@ x-app-common: &app-common
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     volumes:
       - postgres_socket:/var/run/postgresql
       - ./:/app
@@ -37,6 +39,11 @@ services:
     container_name: meetupselector_redis
     image: redis:latest
     restart: always
+    healthcheck:
+      test: redis-cli ping
+      timeout: 45s
+      interval: 10s
+      retries: 10
   celery:
     container_name: meetupselector_celery_worker
     command: worker
