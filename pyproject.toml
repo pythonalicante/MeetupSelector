@@ -27,6 +27,7 @@ module = [
 	'celery.*',
 	'debug_toolbar.*',
 	'setuptools.*',
+	'decouple.*',
 ]
 ignore_missing_imports = true
 
