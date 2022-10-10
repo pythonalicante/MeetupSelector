@@ -8,8 +8,7 @@ x-app-common: &app-common
     stdin_open: true
     tty: true
     env_file:
-      - ./config/django.dev.env
-      - ./config/postgresql.env
+      - ./.env
     restart: always
     depends_on:
       db:
@@ -25,7 +24,7 @@ services:
     container_name: meetupselector_database
     image: postgres:14.2
     env_file:
-      - ./config/postgresql.env
+      - ./.env
     volumes:
       - postgres_data:/var/lib/postgresql/data/
       - postgres_socket:/var/run/postgresql/

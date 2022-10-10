@@ -4,8 +4,6 @@ from .default import *  # noqa
 
 DEBUG = True
 
-SECRET_KEY = "GgL2XYgpsdSpHvDQgwSsXT9qFmkeavRiZPDD1/CZ34s="
-
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", "*"]
 
 INTERNAL_IPS = ["127.0.0.1"]
@@ -14,9 +12,7 @@ if DEBUG:
     import socket
 
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + [
-        "127.0.0.1",
-    ]
+    INTERNAL_IPS += [ip[: ip.rfind(".")] + ".1" for ip in ips]
 
 
 try:
