@@ -1,5 +1,5 @@
 SHELL=/bin/bash
-DOCKER_COMPOSE=docker-compose
+DOCKER_COMPOSE=docker compose
 DOCKER_ENVIRONMENT=docker-compose.yml
 PRE_RUN_API_COMMAND=${DOCKER_COMPOSE} -f ${DOCKER_ENVIRONMENT} run --rm django
 PACKAGE_NAME=meetupselector
