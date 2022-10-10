@@ -1,0 +1,20 @@
+-r requirements.txt
+# Django
+django-debug-toolbar
+django-extensions
+# Linters and more tools
+black
+isort
+flake8
+flake8-pydocstyle
+flake8-django
+# PyTest
+pytest
+pytest-cov
+pytest-mock
+pytest-django
+pytest-xdist[psutil]
+# MyPy
+mypy
+django-stubs
+types-psutil

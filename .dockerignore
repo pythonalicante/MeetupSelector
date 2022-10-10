@@ -1,0 +1,6 @@
+config
+venv
+dockerfiles/Dockerfile
+docker-compose.yml
+.git
+*.db

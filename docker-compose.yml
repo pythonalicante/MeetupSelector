@@ -1,0 +1,65 @@
+version: '3.9'
+
+x-app-common: &app-common
+    image: python_alc/meetupselector:dev
+    build:
+      dockerfile: dockerfiles/Dockerfile
+      context: .
+    stdin_open: true
+    tty: true
+    env_file:
+      - ./.env
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - postgres_socket:/var/run/postgresql
+      - ./:/app
+
+services:
+  db:
+    container_name: meetupselector_database
+    image: postgres:14.2
+    env_file:
+      - ./.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - postgres_socket:/var/run/postgresql/
+    healthcheck:
+      test: pg_isready -q --username=$$POSTGRES_USER --dbname=$$POSTGRES_DB
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    restart: always
+  redis:
+    container_name: meetupselector_redis
+    image: redis:latest
+    restart: always
+    healthcheck:
+      test: redis-cli ping
+      timeout: 45s
+      interval: 10s
+      retries: 10
+  celery:
+    container_name: meetupselector_celery_worker
+    command: worker
+    <<: *app-common
+  celery-beat:
+    container_name: meetupselector_celery_beat
+    command: beat
+    <<: *app-common
+  django:
+    container_name: meetupselector_django
+    command: server
+    ports:
+      - 8000:8000
+    stdin_open: true
+    tty: true
+    <<: *app-common
+
+volumes:
+  postgres_data:
+  postgres_socket:
