@@ -11,6 +11,8 @@ x-app-common: &app-common
       - ./.env
     restart: always
     depends_on:
+      mailhog:
+        condition: service_started
       db:
         condition: service_healthy
       redis:
@@ -43,6 +45,11 @@ services:
       timeout: 45s
       interval: 10s
       retries: 10
+  mailhog:
+    container_name: meetupselector_mailhog
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
   celery:
     container_name: meetupselector_celery_worker
     command: worker
