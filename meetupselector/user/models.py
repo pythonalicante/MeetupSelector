@@ -62,7 +62,13 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this User."""
-        send_mail(subject, message, from_email, [self.email], **kwargs)
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=from_email,
+            recipient_list=[self.email],
+            **kwargs,
+        )
 
     def __str__(self):
         return self.email
