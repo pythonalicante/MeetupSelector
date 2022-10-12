@@ -1,6 +1,6 @@
 # MeetupSelector
 
-This project is meant to be a landing page for the Python Alicate community and a vote-system to organize MeetUps. It allows the community members to propose Meetup topics and also to propose themselves as speakers.
+This project is meant to be a landing page for the Python Alicante community and a vote-system to organize MeetUps. It allows the community members to propose Meetup topics and also to propose themselves as speakers.
 
 ## Structure Overview
 
@@ -18,7 +18,7 @@ Project structure is shown in the following schema:
 
 ## Installation
 
-Fork this project in GitHub to your own account. Clone repository to your local, navigate to `MeetupSelector` directory and execute te following commands:
+Fork this project in GitHub to your own account. Clone repository to your local, navigate to `MeetupSelector` directory and execute the following commands:
 
 ```
 git clone https://github.com/pythonalicante/MeetupSelector.git
