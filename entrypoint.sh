@@ -61,6 +61,8 @@ cd /app
 
 
 case $1 in
+	"bash")
+		bash;;
 	"beat")
 		wait_other_containers ;\
 		django_operations ;\

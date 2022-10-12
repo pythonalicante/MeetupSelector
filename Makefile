@@ -51,6 +51,11 @@ createsuperuser:
 test:
 	${PRE_RUN_API_COMMAND} test
 
+# target: bash - bash code
+.PHONY: bash
+bash:
+	${PRE_RUN_API_COMMAND} bash
+
 # target: lint - Lint the code
 .PHONY: lint
 lint:
