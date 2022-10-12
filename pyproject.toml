@@ -36,7 +36,7 @@ mock_use_standalone_module = true
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-n auto"
+#addopts = "-n auto"
 DJANGO_SETTINGS_MODULE = "meetupselector.settings.test"
 python_files = "tests.py test_*.py *_tests.py tests_*.py"
 required_plugins = "pytest-mock pytest-django pytest-cov"
