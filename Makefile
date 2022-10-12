@@ -55,3 +55,8 @@ test:
 .PHONY: lint
 lint:
 	${PRE_RUN_API_COMMAND} lint
+
+# target: shell - Obtain a django shell
+.PHONY: shell
+shell:
+	${PRE_RUN_API_COMMAND} shell

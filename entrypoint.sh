@@ -100,6 +100,11 @@ case $1 in
 		django_operations ;\
 		python manage.py createsuperuser
 		;;
+	"shell")
+		wait_other_containers ;\
+		django_operations ;\
+		python manage.py shell
+		;;
 	"test")
 		wait_other_containers ;\
 		django_operations ;\

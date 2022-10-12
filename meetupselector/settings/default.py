@@ -205,6 +205,22 @@ LOGGING = {
     },
 }
 
+# Emails
+
+# Global switch
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+# e.g., info@here.com
+DEFAULT_FROM_EMAIL = config("EMAIL_FROM_EMAIL", default=None)
+CONTACT_EMAIL = config("EMAIL_CONTACT_EMAIL", default=None)
+
+# SMTP config
+EMAIL_HOST = config("SMTP_HOST", default="")
+EMAIL_PORT = config("SMTP_PORT", default=25, cast=int)
+EMAIL_HOST_USER = config("SMTP_USER", default=None)
+EMAIL_HOST_PASSWORD = config("SMTP_PASSWORD", default=None)
+EMAIL_USE_TLS = config("SMTP_TLS", default=False, cast=bool)
+
 
 # CELERY STUFF
 CELERY_BROKER_URL = config("CELERY_BROKER_URL", default="redis://redis:6379")
