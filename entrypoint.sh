@@ -53,7 +53,6 @@ wait_other_containers() {
 
 django_operations() {
 	python3 manage.py collectstatic --noinput
-	python3 manage.py makemigrations
 	python3 manage.py migrate
 }
 
@@ -63,6 +62,8 @@ cd /app
 case $1 in
 	"bash")
 		bash;;
+	"makemigrations")
+		python3 manage.py makemigrations;;
 	"beat")
 		wait_other_containers ;\
 		django_operations ;\
