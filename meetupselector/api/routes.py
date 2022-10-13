@@ -5,7 +5,6 @@ project applications.
 """
 from ninja import NinjaAPI
 
-
 api = NinjaAPI()
 
 

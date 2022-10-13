@@ -114,9 +114,9 @@ case $1 in
 		pytest
 		;;
 	"lint")
-		isort --check-only meetupselector
-		black --check meetupselector
-		flake8 meetupselector
+		isort --check-only meetupselector tests
+		black --check meetupselector tests
+		flake8 meetupselector tests
 		mypy meetupselector
 		;;
 	"*")
