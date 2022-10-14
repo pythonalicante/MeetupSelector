@@ -1,7 +1,7 @@
+import uuid
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
-from meetupselector.shared.db.models import AppModel
 
 
 class TalkType(models.TextChoices):
@@ -17,7 +17,10 @@ class TalkDifficulty(models.TextChoices):
 
 
 # Create your models here.
-class Talk(AppModel):
+class Talk(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     name = models.CharField(verbose_name=_("name"), max_length=255)
     headline = models.CharField(verbose_name=_("headline"), max_length=255)
     description = models.TextField(verbose_name=_("description"))
