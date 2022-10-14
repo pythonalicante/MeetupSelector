@@ -1,7 +1,7 @@
 import pytest
 from django.urls import reverse
 
-from meetupselector.api.routes import api
+from meetupselector.api.api import api
 
 
 @pytest.fixture
