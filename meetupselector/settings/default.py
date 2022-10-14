@@ -46,6 +46,7 @@ THIRD_PARTY_APPS: list[str] = [
 
 OUR_APPS = [
     "meetupselector.user",
+    "meetupselector.talks",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + OUR_APPS

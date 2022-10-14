@@ -65,3 +65,8 @@ lint:
 .PHONY: shell
 shell:
 	${PRE_RUN_API_COMMAND} shell
+
+# target: makemigrations - Create the migrations of the database
+.PHONY: makemigrations
+makemigrations:
+	${PRE_RUN_API_COMMAND} makemigrations
