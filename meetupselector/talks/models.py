@@ -75,6 +75,7 @@ class Talk(models.Model):
     speakers = models.ManyToManyField(
         to=Speaker, related_name="talks", verbose_name=_("speakers"), blank=True
     )
+    topics = models.ManyToManyField(to=Topic, verbose_name=_("topics"), related_name="talks")
 
     class Meta:
         verbose_name = _("talk")
