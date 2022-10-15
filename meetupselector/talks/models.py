@@ -72,6 +72,9 @@ class Talk(models.Model):
     )
     slides = models.URLField(verbose_name=_("slides"), blank=True, null=True)
     repository = models.URLField(verbose_name=_("repository"), blank=True, null=True)
+    speakers = models.ManyToManyField(
+        to=Speaker, related_name="talks", verbose_name=_("speakers"), blank=True
+    )
 
     class Meta:
         verbose_name = _("talk")
