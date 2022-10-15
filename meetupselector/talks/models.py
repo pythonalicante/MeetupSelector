@@ -17,6 +17,21 @@ class TalkDifficulty(models.TextChoices):
 
 
 # Create your models here.
+class Topic(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    name = models.CharField(verbose_name=_("name"), max_length=255)
+    description = models.TextField(verbose_name=_("description"))
+
+    class Meta:
+        verbose_name = _("topic")
+        verbose_name_plural = _("topics")
+
+    def __str__(self) -> str:
+        return f"{self.name}"
+
+
 class Talk(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)
