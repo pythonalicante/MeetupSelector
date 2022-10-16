@@ -1,10 +1,5 @@
 # Contributor's Guide
 
-'HOW TO CONTRIBUTE TO OPEN SOURCE' accepts PR's (pull requests) from **newbies**
-only. This is to help **newbies** get familiar with the contribution processes.
-
-Issues can be submitted by anyone - either seasoned developers or newbies.
-
 **Contents**
 
 - [Getting Started](#getting-started)
@@ -68,7 +63,7 @@ Within GitHub, visit this main repository and you should see a banner suggesting
 
 It is also recommended to add a **list with the description of all commits** included in PR.
 
-When possible, add a **link to the task/ticket/issue description**. It can be a link to task in GH project board, Jira ticket, etc...
+When possible, add a **link to the task/ticket/issue description**. It can be a link to task in GH project board, Taiga ticket, etc...
 
 [What is a Pull Request?](https://yangsu.github.io/pull-request-tutorial/)
 
