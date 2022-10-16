@@ -1,6 +1,6 @@
 # MeetupSelector
 
-This project is meant to be a landing page for the Python Alicante community and a vote-system to organize MeetUps. It allows the community members to propose Meetup topics and also to propose themselves as speakers.
+This project is meant to be a landing page for the Python Alicante community and a like-system to organize MeetUps. It allows the community members to propose Meetup topics and also to propose themselves as speakers.
 
 ## Structure Overview
 
@@ -35,6 +35,22 @@ make build  # To create Docker images
 make run  # To run the project
 make createsuperuser  # To create an administrator user in the application
 ```
+
+## Organization
+
+This project manages the Issues and Tasks in [Taiga](https://tree.taiga.io/project/aalmiramolla-meetupselector/kanban). Feel free to open an Issue in GitHub, it's synchronised with Taiga. If you want to collaborate, read the next section.
+
+## How to contribute?
+
+Read [CONTRIBUTING.md](https://github.com/pythonalicante/Meetup-Selector/blob/main/CONTRIBUTING.md).
+
+## Contributors
+
+<a href="https://github.com/pythonalicante/meetupselector/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=pythonalicante/meetupselector" />
+</a>
+
+Made with [contributors-img](https://contributors-img.web.app).
 
 ## License
 
