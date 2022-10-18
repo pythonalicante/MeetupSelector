@@ -14,6 +14,6 @@ def get_topics(_):
     return TopicService.list()
 
 
-@router.get("/topic/{topic_id}", url_name="get_topic", response=TopicRetrieveSchema)
+@router.get("/topic/{topic_id}", response=TopicRetrieveSchema, url_name="get_topic")
 def get_topic(_, topic_id: UUID4):
     return TopicService.get(topic_id=topic_id)
