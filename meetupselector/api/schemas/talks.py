@@ -3,6 +3,12 @@ from ninja import ModelSchema
 from meetupselector.talks.models import Talk, Topic
 
 
+class TopicListSchema(ModelSchema):
+    class Config:
+        model = Topic
+        model_fields = ["id", "name"]
+
+
 class TopicRetrieveSchema(ModelSchema):
     class Config:
         model = Topic
