@@ -4,6 +4,7 @@ from http import HTTPStatus
 import pytest
 from django.urls import reverse_lazy
 
+from tests.utils.builders.talk import TalkBuilder
 from tests.utils.builders.topic import TopicBuilder
 
 
@@ -38,6 +39,70 @@ def test_get_topic_endpoint_return_topic(client):
         "id": str(topic.id),
         "name": "MyTopic",
         "description": "Test Topic Description",
+    }
+
+    response = client.get(url)
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == expected_payload
+
+
+@pytest.mark.django_db
+def test_get_all_talks_exists(client, reverse_url):
+    url = reverse_url("list_talks")
+    expected_payload = []
+
+    response = client.get(url)
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == expected_payload
+
+
+@pytest.mark.django_db
+def test_get_all_talks_endpoint_return_talks(client, reverse_url):
+    talk = (
+        TalkBuilder()
+        .with_name("MyTalk")
+        .with_description("MyDescription")
+        .with_headline("My headline")
+        .with_type("T")
+        .with_difficulty("E")
+        .with_duration("00:00:12")
+        .build()
+    )
+    url = reverse_url("list_talks")
+    expected_payload = [{"id": str(talk.id), "name": "MyTalk", "headline": "My headline"}]
+
+    response = client.get(url)
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == expected_payload
+
+
+@pytest.mark.django_db
+def test_get_talk_endpoint_return_talk(client):
+    topic = TopicBuilder().with_name("MyTopic").build()
+    talk = (
+        TalkBuilder()
+        .with_name("MyTalk")
+        .with_description("MyDescription")
+        .with_headline("My headline")
+        .with_type("T")
+        .with_difficulty("E")
+        .with_duration("500 00:00:12")
+        .with_topic(topic)
+        .build()
+    )
+    url = reverse_lazy("api-alpha:get_talk", kwargs={"talk_id": talk.id})
+    expected_payload = {
+        "id": str(talk.id),
+        "name": "MyTalk",
+        "description": "MyDescription",
+        "headline": "My headline",
+        "type": "T",
+        "difficulty": "E",
+        "duration": "P500DT00H00M12S",
+        "topics": [{"id": str(topic.id), "name": topic.name, "description": topic.description}],
     }
 
     response = client.get(url)
