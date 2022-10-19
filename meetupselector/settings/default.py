@@ -46,7 +46,7 @@ THIRD_PARTY_APPS: list[str] = [
 
 OUR_APPS = [
     "meetupselector.user",
-    "meetupselector.talks", 
+    "meetupselector.talks",
     "meetupselector.proposals",
 ]
 

@@ -1,36 +1,69 @@
-from email.policy import default
-from random import choices
-from tabnanny import verbose
-from unittest.util import _MAX_LENGTH
 import uuid
 
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-
-class Difficulty(models.TextChoices):
-    EASY = "E", _("easy")
-    MEDIUM = "M", _("medium")
-    HARD = "H", _("hard")
+from meetupselector.talks.models import TalkDifficulty as Difficulty
 
 
 class Language(models.TextChoices):
-    EN_GB = "EN", _("english")
-    FR_FR = "FR", _("french")
+    EN_GB = "EN_GB", _("english")
+    FR_FR = "FR_FR", _("french")
     ES_ES = "ES_ES", _("spain")
     ES_EU = "ES_EU", _("basque")
     ES_CA = "ES_CA", _("catalonian")
     ES_GL = "ES_GL", _("galicia")
 
+
 class Proposal(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    subject = models.CharField(max_length=255, verbose_name=_("subjects"))
     description = models.TextField(verbose_name=_("description"))
     difficulty = models.CharField(
-        verbose_name= _("difficulty"),
+        verbose_name=_("difficulty"),
         max_length=1,
         choices=Difficulty.choices,
         default=Difficulty.EASY,
     )
+    Language = models.CharField(
+        verbose_name=_("language"),
+        max_length=6,
+        choices=Language.choices,
+        default=Language.ES_ES,
+    )
+    topic = models.ManyToManyField(
+        "talks.Topic",
+        verbose_name=_("topics"),
+        related_name="proposals",
+    )
+    talks = models.ManyToManyField(
+        "talks.Talk",
+        verbose_name=_("topics"),
+        related_name="proposals",
+    )
+    proposed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name=_("proposed_by"),
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="proposal",
+    )
+    liked_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        verbose_name=_("liked_by"),
+        related_name="proposals",
+    )
+    done = models.BooleanField(
+        default=False,
+        verbose_name=_("done"),
+    )
 
+    class Meta:
+        verbose_name = _("proposal")
+        verbose_name_plural = _("proposals")
+
+    def __str__(self) -> str:
+        return self.subject
