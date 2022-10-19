@@ -2,8 +2,10 @@
 from http import HTTPStatus
 
 import pytest
+from django.test import Client
 from django.urls import reverse_lazy
 
+from meetupselector.talks.models import Talk
 from tests.utils.builders.talk import TalkBuilder
 from tests.utils.builders.topic import TopicBuilder
 
@@ -109,3 +111,23 @@ def test_get_talk_endpoint_return_talk(client):
 
     assert response.status_code == HTTPStatus.OK
     assert response.json() == expected_payload
+
+
+@pytest.mark.django_db
+def test_post_talk_endpoint_can_create_talk(client: Client, reverse_url):
+    url = reverse_url("list_talks")  # Is the same endpoint
+    topic = TopicBuilder().with_name("MyTopic").build()
+    talk_data = {
+        "name": "MyTalk",
+        "description": "MyDescription",
+        "headline": "My headline",
+        "type": "T",
+        "difficulty": "E",
+        "duration": 500,
+        "topics": [str(topic.id)],
+    }
+
+    response = client.post(url, data=talk_data, content_type="application/json")
+
+    assert response.status_code == HTTPStatus.CREATED
+    assert len(Talk.objects.all()) == 1

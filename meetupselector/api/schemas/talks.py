@@ -1,6 +1,7 @@
 import logging
 
 from ninja import ModelSchema
+from pydantic import UUID4
 
 from meetupselector.talks.models import Talk, Topic
 
@@ -41,4 +42,20 @@ class TalkRetrieveSchema(ModelSchema):
             "topics",
             "created_at",
             "updated_at",
+        ]
+
+
+class TalkCreateSchema(ModelSchema):
+    topics: list[UUID4]
+
+    class Config:
+        model = Talk
+        model_fields = [
+            "name",
+            "headline",
+            "description",
+            "duration",
+            "type",
+            "difficulty",
+            "topics",
         ]
