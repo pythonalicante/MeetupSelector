@@ -8,6 +8,7 @@ from meetupselector.api.schemas.talks import (
     TalkCreateSchema,
     TalkListSchema,
     TalkRetrieveSchema,
+    TalkUpdateSchema,
     TopicListSchema,
     TopicRetrieveSchema,
 )
@@ -41,3 +42,8 @@ def get_talk(_, talk_id: UUID4):
 @router.post("/talk", response={201: TalkRetrieveSchema})
 def create_talk(_, talk: TalkCreateSchema):
     return 201, TalkService.create(**talk.dict())
+
+
+@router.patch("/talk", response={200: TalkRetrieveSchema})
+def update_talk(_, talk: TalkUpdateSchema):
+    return 200, TalkService.update(**talk.dict())

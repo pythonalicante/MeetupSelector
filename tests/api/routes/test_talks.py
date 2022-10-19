@@ -131,3 +131,31 @@ def test_post_talk_endpoint_can_create_talk(client: Client, reverse_url):
 
     assert response.status_code == HTTPStatus.CREATED
     assert len(Talk.objects.all()) == 1
+
+
+@pytest.mark.django_db
+def test_patch_talk_endpoint_can_update_talk(client: Client, reverse_url):
+    url = reverse_url("list_talks")  # Is the same endpoint
+    topic = TopicBuilder().with_name("MyTopic").build()
+    talk = (
+        TalkBuilder()
+        .with_name("MyTalk")
+        .with_description("MyDescription")
+        .with_headline("My headline")
+        .with_type("T")
+        .with_difficulty("E")
+        .with_duration("500 00:00:12")
+        .with_topic(topic)
+        .build()
+    )
+    new_description_expected = "My New Description"
+    talk_new_data = {
+        "id": str(talk.id),
+        "description": new_description_expected,
+    }
+
+    response = client.patch(url, data=talk_new_data, content_type="application/json")
+
+    assert response.status_code == HTTPStatus.OK
+    talk.refresh_from_db()
+    assert talk.description == new_description_expected
