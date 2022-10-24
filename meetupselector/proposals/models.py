@@ -28,13 +28,13 @@ class Proposal(models.Model):
         choices=Difficulty.choices,
         default=Difficulty.EASY,
     )
-    Language = models.CharField(
+    language = models.CharField(
         verbose_name=_("language"),
         max_length=6,
         choices=Language.choices,
         default=Language.ES_ES,
     )
-    topic = models.ManyToManyField(
+    topics = models.ManyToManyField(
         "talks.Topic",
         verbose_name=_("topics"),
         related_name="proposals",
