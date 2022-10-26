@@ -1,0 +1,52 @@
+@startuml
+	title MeetupSelector Architecture
+
+	!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+	!include https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2/flutter.puml
+	!include https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons/redis.puml
+	!include https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons/django.puml
+	!include https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons/nginx.puml
+	!include https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons/postgresql.puml
+	!include https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5/users.puml
+
+	LAYOUT_LANDSCAPE()
+	SHOW_PERSON_OUTLINE()
+
+	AddRelTag("async", $lineStyle = DashedLine())
+
+	Person(admin, "Administrator", "Administrates the system")
+	Person(logged_user, "Logged User", "Can vote the proposals")
+	Person(web_user, "Web User", "Can view the web page")
+
+	System_Boundary(meetupSelector, "Meetup Selector") {
+		Container(nginx, "Web Application", "nginx", "Delivers static content and Fleet App", $sprite="nginx")
+		Container(frontend, "Application", "Fleet", "Provides all the features of Meetup Selector plus a Landing Page to users via their web browser", $sprite="flutter")
+		Container(django, "API Application", "Django", "Provides a system to vote and add proposals for MeetUps", $sprite="django")
+		Container(celery_worker, "Background Tasks Worker", "celery", "A worker that launches tasks in backgroud")
+		Container(celery_beat, "Background Tasks Manager", "celery", "A manager that launches tasks in backgroud from a specific time")
+		ContainerQueue(redis, "Message Broker", "redis", $sprite="redis")
+		ContainerDb(django_db, "Database", "PostgreSQL", $sprite="postgresql")
+
+
+		Rel(django, redis, "Send tasks")
+		Rel(celery_beat, django_db, "Read tasks and when to launch")
+		Rel(celery_beat, celery_worker, "Sends tasks", "async", $tags="async")
+		Rel(redis, celery_worker, "Sends tasks", "async", $tags="async")
+		Rel(django, django_db, "Reads from and writes to")
+		Rel(frontend, django, "Makes API Calls", "https,json")
+	}
+
+	System_Ext(mail_system, "Email System", "The external email server")
+
+	Rel(web_user, nginx, "Visits Meetup Selector domain using", "https")
+	Rel(logged_user, nginx, "Votes for proposals using", "https")
+	Rel(admin, nginx, "Administrates using Meetup Selector administrative domain")
+	Rel(nginx, frontend, "Delivers to the customer's web browser")
+	Rel(django, mail_system, "Sends email using", "SMTP")
+	Rel(mail_system, admin, "Sends email to")
+	Rel(mail_system, logged_user, "Sends email to")
+
+	Rel_Down(logged_user, web_user, "Extends")
+
+	SHOW_LEGEND()
+@enduml
