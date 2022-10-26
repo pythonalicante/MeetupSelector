@@ -18,3 +18,5 @@ pytest-xdist[psutil]
 mypy
 django-stubs
 types-psutil
+pyhamcrest
+freezegun
