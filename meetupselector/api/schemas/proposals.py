@@ -1,15 +1,16 @@
 from ninja import ModelSchema
 from pydantic import UUID4
 
-from .talks import TopicRetrieveSchema
 from meetupselector.proposals.models import Proposal
+
+from .talks import TalkListSchema, TopicRetrieveSchema
 
 
 class ProposalCreateSchema(ModelSchema):
-    topics: list[UUID4]
-    talks: list[UUID4]
+    topics: list[UUID4] | None = None
+    talks: list[UUID4] | None = None
     proposed_by: UUID4
-    liked_by: list[UUID4]
+    liked_by: list[UUID4] | None = None
 
     class Config:
         model = Proposal
@@ -28,6 +29,7 @@ class ProposalCreateSchema(ModelSchema):
 
 class ProposalRetrieveSchema(ModelSchema):
     topics: list[TopicRetrieveSchema]
+    talks: list[TalkListSchema]
 
     class Config:
         model = Proposal
