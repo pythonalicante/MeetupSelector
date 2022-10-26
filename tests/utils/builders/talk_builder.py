@@ -6,14 +6,14 @@ from meetupselector.talks.models import Speaker, Talk, Topic
 
 class TalkBuilder:
 
-    name: str = "name"
-    headline: str = "headline"
-    description: str = "description"
-    duration: timedelta = timedelta(minutes=60)
-    type: str = "T"
-    difficulty: str = "E"
-    speakers: Iterable[Speaker] = []
-    topics: Iterable[Topic] = []
+    _name: str = "name"
+    _headline: str = "headline"
+    _description: str = "description"
+    _duration: timedelta = timedelta(minutes=60)
+    _type: str = "T"
+    _difficulty: str = "E"
+    _speakers: Iterable[Speaker] = []
+    _topics: Iterable[Topic] = []
 
     def with_name(self, name: str) -> "TalkBuilder":
         self._name = name
