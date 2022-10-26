@@ -2,6 +2,7 @@ import logging
 import typing as t
 
 from django.db.models import QuerySet
+from django.shortcuts import get_object_or_404
 from pydantic import UUID4
 
 from ..models import Talk
@@ -14,7 +15,7 @@ def list() -> QuerySet[Talk]:
 
 
 def get(talk_id: UUID4) -> Talk:
-    return Talk.objects.get(id=talk_id)
+    return get_object_or_404(Talk, id=talk_id)
 
 
 def create(
@@ -51,7 +52,6 @@ def update(
     difficulty: str,
     topics: t.List[UUID4],
 ) -> Talk:
-    logger.debug("LLEGO")
     _talk: Talk = Talk.objects.get(id=id)
     if name:
         _talk.name = name
