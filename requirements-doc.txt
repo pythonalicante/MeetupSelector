@@ -1,0 +1,7 @@
+mkdocs
+mkdocs-material
+mkdocstrings[python]
+mkdocs-with-pdf
+mkdocs-exclude
+mkdocs-build-plantuml-plugin
+

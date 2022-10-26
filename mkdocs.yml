@@ -1,0 +1,72 @@
+site_name: Meetup Selector
+copyright: Copyright &copy; 2022-present Python Alicante
+
+dev_addr: 127.0.0.1:8001
+
+repo_url: https://github.com/pythonalicante/MeetupSelector/
+repo_name: pythonalicante/MeetupSelector
+
+nav:
+  - Home: 'index.md'
+  - About:
+    - 'about_us/index.md'
+    - License: 'about_us/license.md'
+    - Releases: 'about_us/releases.md'
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.instant
+    - navigation.expand
+    - navigation.indexes
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+
+markdown_extensions:
+  - footnotes
+  - tables
+
+extra:
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/python_alc
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/aDdTHZSggd
+    - icon: fontawesome/brands/telegram
+      link: https://t.me/python_alc
+    - icon: fontawesome/brands/github-alt
+      link: https://github.com/pythonalicante
+
+plugins:
+  - search
+  - build_plantuml:
+      render: 'server' # or "local" for local rendering
+      server: 'http://www.plantuml.com/plantuml' # offical plantuml server
+      disable_ssl_certificate_validation: true # for self-signed and invalid certs
+      output_format: 'png' # or "svg"
+      diagram_root: 'docs/diagrams' # should reside under docs_dir
+      output_folder: 'out'
+      input_folder: 'src'
+  - mkdocstrings:
+      handlers:
+        python:
+          selection:
+            docstring_style: numpy
+          rendering:
+            show_submodules: true
+            docstring_section_style: table
+            show_signature: true
+            show_root_toc_entry: false
+            heading_level: 3
+            show_source: false

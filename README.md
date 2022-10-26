@@ -6,9 +6,9 @@ This project is meant to be a landing page for the Python Alicante community and
 
 Project structure is shown in the following schema:
 
-![Project schema](./doc/schemas/MeetupSelector_overview.png)
+![Project schema](./docs/schemas/MeetupSelector_overview.png)
 
-[Schema source](./doc/schemas/MeetupSelector_overview.drawio)
+[Schema source](./docs/schemas/MeetupSelector_overview.drawio)
 
 ## Prerequisites
 

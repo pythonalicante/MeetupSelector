@@ -22,6 +22,15 @@ setup:
 	${PYTHON_VERSION} -m venv ${VENV_FOLDER}
 	${LAUNCH_IN_VENV} pip install -r requirements-dev.txt
 
+# target: setup-docs - install the requirements to launch the docs locally
+setup-docs: setup
+	${LAUNCH_IN_VENV} pip install -r requirements-doc.txt
+
+.PHONY: docs
+# target: docs - launch the mkdocs server
+docs:
+	${LAUNCH_IN_VENV} mkdocs serve
+
 # target: build - Build the docker images
 build:
 	${DOCKER_COMPOSE} -f ${DOCKER_ENVIRONMENT} build
