@@ -1,0 +1,100 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+hide circle
+package Talks as PTalks {
+  entity Topic {
+    * id: UUID
+    * created_at: datetime
+    * updated_at: datetime
+    --
+    * name: string
+    * description: string
+  }
+  entity Talk {
+    * id: UUID
+    * created_at: datetime
+    * updated_at: datetime
+    --
+    * name: string
+    * headline: string
+    * description: string
+    * level: string
+    * difficulty: string
+    * type: string
+    * language: string
+    slides: string
+    repository: string
+  }
+  entity Speaker {
+    * id: UUID
+    * created_at: datetime
+    * updated_at: datetime
+    --
+    * name: string
+    * contact_email: string
+    * city: string
+    * language: [string]
+    social_networks: json
+    webpage: string
+  }
+}
+package User as PUser{
+  entity User {
+    * id: UUID
+    * created_at: datetime
+    * updated_at: datetime
+    --
+    * email: string
+    * first_name: string
+    * last_name: string
+  }
+}
+package Proposals as PProposals{
+  entity Event {
+    * id: UUID
+    * created_at: datetime
+    * updated_at: datetime
+    --
+    * name: string
+    * description: string
+    * meetup_link: string
+    * location: string
+  }
+  entity Proposal {
+    * id: UUID
+    * created_at: datetime
+    * updated_at: datetime
+    --
+    * subject: string
+    * description: string
+    * difficulty: string
+    * language: string
+    * level: string
+    * type: string
+    done: bool
+  }
+  entity ProposalTalkLikes {
+    * id: UUID
+    --
+    * proposal_id: <<FK>> Proposal
+    * talk_by: <<FK>> Talk
+    liked_by: User
+  }
+}
+
+PUser-[hidden]-PProposals
+PProposals-right[hidden]-PTalks
+
+Topic }|..o{ Talk
+Topic }o..o{ Proposal
+Proposal }o..o{ Talk
+User }|..o{ Talk
+Speaker }|..o{ Talk
+User ||..o{ Proposal : propose
+User }o..o{ Proposal : likes
+Event }o..|| Talk : has a
+(Proposal, Talk) -- ProposalTalkLikes
+ProposalTalkLikes }o..o{ User : likes_talk_of_proposal
+
+@enduml
