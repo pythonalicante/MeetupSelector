@@ -44,6 +44,11 @@ This project manages the Issues and Tasks in [Taiga](https://tree.taiga.io/proje
 
 Read [CONTRIBUTING.md](https://github.com/pythonalicante/Meetup-Selector/blob/main/CONTRIBUTING.md).
 
+## Roadmap
+
+To view the project roadmap, read the [roadmap section on documentation](https://pythonalicante.github.io/MeetupSelector/roadmap/).
+
+
 ## Contributors
 
 <a href="https://github.com/pythonalicante/meetupselector/graphs/contributors">
