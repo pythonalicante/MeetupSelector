@@ -8,6 +8,7 @@ repo_name: pythonalicante/MeetupSelector
 
 nav:
   - Home: 'index.md'
+  - Roadmap: 'roadmap.md'
   - About:
     - 'about_us/index.md'
     - License: 'about_us/license.md'
