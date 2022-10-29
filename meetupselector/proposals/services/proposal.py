@@ -5,6 +5,8 @@ from pydantic import UUID4
 
 from ..models import Proposal
 
+from django.db.models import QuerySet
+
 User = get_user_model()
 
 
@@ -36,3 +38,7 @@ def create(
         proposal.liked_by.add(_user)  # type: ignore
 
     return proposal
+
+
+def retrieve_all() -> QuerySet[Proposal]:
+    return Proposal.objects.all()
