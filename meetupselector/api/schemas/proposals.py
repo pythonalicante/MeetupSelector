@@ -43,3 +43,19 @@ class ProposalRetrieveSchema(ModelSchema):
             "liked_by",
             "done",
         ]
+
+
+class ProposalListSchema(ModelSchema):
+    topics: list[TopicRetrieveSchema]
+
+    class Config:
+        model = Proposal
+        model_fields = [
+            "id",
+            "created_at",
+            "updated_at",
+            "subject",
+            "difficulty",
+            "language",
+            "topics",
+        ]
