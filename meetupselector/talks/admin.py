@@ -1,8 +1,5 @@
 from django.contrib import admin
 
-from meetupselector.talks.models import Speaker, Talk, Topic
+from meetupselector.talks.models import Topic
 
-# Register your models here.
-admin.site.register(Speaker)
 admin.site.register(Topic)
-admin.site.register(Talk)

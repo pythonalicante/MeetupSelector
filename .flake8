@@ -7,7 +7,6 @@ exclude =
 	__pycache__,
 	venv,
 	.env,
-	**/migrations/*,
 
 max-line-length = 100
 select = C,E,F,W,DJ,DJ10,DJ11

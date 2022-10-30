@@ -3,12 +3,11 @@ from pydantic import UUID4
 
 from meetupselector.proposals.models import Proposal
 
-from .talks import TalkListSchema, TopicRetrieveSchema
+from .talks import TopicRetrieveSchema
 
 
 class ProposalCreateSchema(ModelSchema):
     topics: list[UUID4] | None = None
-    talks: list[UUID4] | None = None
     proposed_by: UUID4
     liked_by: list[UUID4] | None = None
 
@@ -20,7 +19,6 @@ class ProposalCreateSchema(ModelSchema):
             "difficulty",
             "language",
             "topics",
-            "talks",
             "proposed_by",
             "liked_by",
             "done",
@@ -29,7 +27,6 @@ class ProposalCreateSchema(ModelSchema):
 
 class ProposalRetrieveSchema(ModelSchema):
     topics: list[TopicRetrieveSchema]
-    talks: list[TalkListSchema]
 
     class Config:
         model = Proposal
@@ -42,7 +39,6 @@ class ProposalRetrieveSchema(ModelSchema):
             "difficulty",
             "language",
             "topics",
-            "talks",
             "proposed_by",
             "liked_by",
             "done",

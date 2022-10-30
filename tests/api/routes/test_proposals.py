@@ -14,7 +14,7 @@ from hamcrest import (
 )
 
 from meetupselector.proposals.models import Proposal
-from tests.utils.builders import TalkBuilder, TopicBuilder, UserBuilder
+from tests.utils.builders import TopicBuilder, UserBuilder
 
 
 @freeze_time("2022-10-26 23:23:23")
@@ -28,14 +28,12 @@ def test_create_proposal(client, reverse_url):
     proposer = UserBuilder().with_email("a@a.com").build()
     fanboy = UserBuilder().with_email("b@b.com").build()
     topic = TopicBuilder().build()
-    talk = TalkBuilder().build()
     payload = {
         "subject": subject,
         "description": description,
         "difficulty": difficulty,
         "language": lang,
         "topics": [topic.id],
-        "talks": [talk.id],
         "proposed_by": str(proposer.pk),
         "liked_by": [str(fanboy.pk)],
         "done": False,
@@ -71,15 +69,6 @@ def test_create_proposal(client, reverse_url):
                         "updated_at": expected_creation_datetime_str,
                     }
                 ],
-                "talks": [
-                    {
-                        "id": str(talk.id),
-                        "name": talk.name,
-                        "type": talk.type,
-                        "created_at": expected_creation_datetime_str,
-                        "updated_at": expected_creation_datetime_str,
-                    }
-                ],
                 "proposed_by": str(proposer.id),
                 "liked_by": [str(fanboy.id)],
                 "done": False,
@@ -103,9 +92,6 @@ def test_create_proposal(client, reverse_url):
     topics = created_proposal.topics.all()
     assert_that(topics, has_length(1))
     assert_that(topics.first().id, equal_to(topic.id))
-    talks = created_proposal.talks.all()
-    assert_that(talks, has_length(1))
-    assert_that(talks.first().id, equal_to(talk.id))
     liked_by = created_proposal.liked_by.all()
     assert_that(liked_by, has_length(1))
     assert_that(liked_by.first().id, equal_to(fanboy.id))
