@@ -1,7 +1,6 @@
 from http import HTTPStatus
 
 import pytest
-from django.urls import reverse_lazy
 from django.utils.timezone import now
 from freezegun import freeze_time
 from hamcrest import (
@@ -12,6 +11,7 @@ from hamcrest import (
     has_length,
     has_properties,
     is_,
+    only_contains,
 )
 
 from meetupselector.proposals.models import Proposal
@@ -100,7 +100,7 @@ def test_create_proposal(client, reverse_url):
 
 @freeze_time("2022-10-26 23:23:23")
 @pytest.mark.django_db
-def test_like_proposal(client):
+def test_like_proposal(client, reverse_url):
     subject = "anything"
     password = "Password10!"
     description = "Any description"
@@ -115,7 +115,7 @@ def test_like_proposal(client):
         .with_proposed_by(proposer)
         .build()
     )
-    url = reverse_lazy("api-alpha:like_proposal", kwargs={"proposal_id": proposal.id})
+    url = reverse_url("like_proposal", kwargs={"proposal_id": proposal.id})
     client.login(username=fanboy.email, password=password)
 
     response = client.put(url, data={}, content_type="application/json")
@@ -129,7 +129,7 @@ def test_like_proposal(client):
 
 @freeze_time("2022-10-26 23:23:23")
 @pytest.mark.django_db
-def test_unlike_proposal(client):
+def test_unlike_proposal(client, reverse_url):
     subject = "anything"
     password = "Password10!"
     description = "Any description"
@@ -145,7 +145,7 @@ def test_unlike_proposal(client):
         .with_liked_by([fanboy])
         .build()
     )
-    url = reverse_lazy("api-alpha:like_proposal", kwargs={"proposal_id": proposal.id})
+    url = reverse_url("like_proposal", kwargs={"proposal_id": proposal.id})
     client.login(username=fanboy.email, password=password)
 
     response = client.delete(url, data={}, content_type="application/json")
@@ -158,7 +158,7 @@ def test_unlike_proposal(client):
 
 @freeze_time("2022-10-26 23:23:23")
 @pytest.mark.django_db
-def test_user_not_authenticated_like_proposal(client):
+def test_user_not_authenticated_like_proposal(client, reverse_url):
     subject = "anything"
     description = "Any description"
     proposer = UserBuilder().with_email("a@a.com").build()
@@ -171,7 +171,7 @@ def test_user_not_authenticated_like_proposal(client):
         .with_proposed_by(proposer)
         .build()
     )
-    url = reverse_lazy("api-alpha:like_proposal", kwargs={"proposal_id": proposal.id})
+    url = reverse_url("like_proposal", kwargs={"proposal_id": proposal.id})
 
     response = client.put(url, data={}, content_type="application/json")
 
@@ -195,18 +195,39 @@ def test_get_list_proposals_exists(client, reverse_url):
 @freeze_time("2022-10-26 23:23:23")
 @pytest.mark.django_db
 def test_list_proposals_endpoint_return_proposals(client, reverse_url):
-    (
+    proposal1 = (
         ProposalBuilder()
         .with_subject("proposal1")
         .with_description("first proposal description")
         .build()
     )
-    (
+    proposal2 = (
         ProposalBuilder()
         .with_subject("proposal2")
         .with_description("second proposal description")
         .build()
     )
+    expected_creation_datetime_str = "2022-10-26T23:23:23Z"
+    expected_payload = [
+        {
+            "id": str(proposal1.id),
+            "created_at": expected_creation_datetime_str,
+            "updated_at": expected_creation_datetime_str,
+            "subject": proposal1.subject,
+            "difficulty": proposal1.difficulty,
+            "language": proposal1.language,
+            "topics": [],
+        },
+        {
+            "id": str(proposal2.id),
+            "created_at": expected_creation_datetime_str,
+            "updated_at": expected_creation_datetime_str,
+            "subject": proposal2.subject,
+            "difficulty": proposal2.difficulty,
+            "language": proposal2.language,
+            "topics": [],
+        },
+    ]
     url = reverse_url("create_list_proposal")
 
     response = client.get(url)
@@ -214,4 +235,10 @@ def test_list_proposals_endpoint_return_proposals(client, reverse_url):
 
     assert_that(response.status_code, equal_to(HTTPStatus.OK))
     assert_that(listed_proposals, has_length(2))
-    # TODO: Check the expected payload
+    assert_that(
+        listed_proposals,
+        only_contains(
+            has_entries(**expected_payload[0]),
+            has_entries(**expected_payload[1]),
+        ),
+    )
