@@ -15,7 +15,6 @@ def create(
     difficulty: str,
     language: str,
     topics: List[UUID4],
-    talks: List[UUID4],
     proposed_by: UUID4,
     liked_by: List[UUID4],
     done: bool,
@@ -31,8 +30,6 @@ def create(
     proposal.save()
     for _topic in topics:
         proposal.topics.add(_topic)  # type: ignore
-    for _talk in talks:
-        proposal.talks.add(_talk)  # type: ignore
     for _user in liked_by:
         proposal.liked_by.add(_user)  # type: ignore
 

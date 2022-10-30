@@ -39,11 +39,6 @@ class Proposal(models.Model):
         verbose_name=_("topics"),
         related_name="proposals",
     )
-    talks = models.ManyToManyField(
-        "talks.Talk",
-        verbose_name=_("topics"),
-        related_name="proposals",
-    )
     proposed_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name=_("proposed_by"),
@@ -55,6 +50,7 @@ class Proposal(models.Model):
         settings.AUTH_USER_MODEL,
         verbose_name=_("liked_by"),
         related_name="proposals",
+        blank=True,
     )
     done = models.BooleanField(
         default=False,
