@@ -13,6 +13,7 @@ class ProposalBuilder:
     _description: str = "description"
     _topics: Iterable[Topic] = []
     _proposed_by: User = None
+    _liked_by: Iterable[User] = []
 
     def with_subject(self, subject):
         self._subject = subject
@@ -30,6 +31,10 @@ class ProposalBuilder:
         self._proposed_by = proposed_by
         return self
 
+    def with_liked_by(self, users: Iterable[User]) -> "ProposalBuilder":
+        self._liked_by = users
+        return self
+
     def build(self) -> Proposal:
         proposal = Proposal.objects.create(
             subject=self._subject,
@@ -39,4 +44,7 @@ class ProposalBuilder:
         if self._topics:
             for topic in self._topics:
                 proposal.topics.add(topic)
+        if self._liked_by:
+            for user in self._liked_by:
+                proposal.liked_by.add(user)
         return proposal
