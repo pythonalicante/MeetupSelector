@@ -1,7 +1,6 @@
 from http import HTTPStatus
 
 import pytest
-from django.urls import reverse_lazy
 from freezegun import freeze_time
 from hamcrest import assert_that, empty, equal_to, has_entries, has_item
 
@@ -35,11 +34,11 @@ def test_get_all_topics_endpoint_return_topics(client, reverse_url):
 
 @freeze_time("2022-10-26 23:23:23")
 @pytest.mark.django_db
-def test_get_topic_endpoint_return_topic(client):
+def test_get_topic_endpoint_return_topic(client, reverse_url):
     name = "MyTopic"
     description = "Test Topic Description"
     topic = TopicBuilder().with_name(name).with_description(description).build()
-    url = reverse_lazy("api-alpha:get_topic", kwargs={"topic_id": topic.id})
+    url = reverse_url("get_topic", kwargs={"topic_id": topic.id})
     expected_creation_datetime_str = "2022-10-26T23:23:23Z"
 
     response = client.get(url)
