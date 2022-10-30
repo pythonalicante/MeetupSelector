@@ -14,8 +14,13 @@ from meetupselector.proposals.services import ProposalService
 router = Router(auth=django_auth)
 
 
+@router.get("/proposal", response={200: t.List[ProposalListSchema]}, url_name="create_list_proposal", auth=None)
+def list_proposals(request):
+    return 200, ProposalService.retrieve_all()
+
+
 @router.post(
-    "/proposal", response={201: ProposalRetrieveSchema}, url_name="create_list_proposal", auth=None
+    "/proposal", response={201: ProposalRetrieveSchema}, auth=None
 )
 def create_proposal(request, proposal: ProposalCreateSchema):
     return 201, ProposalService.create(**proposal.dict())
@@ -43,6 +48,3 @@ def unlike_proposal(request, proposal_id: UUID4):
     return 204, None
 
     
-@router.get("/proposal", response={200: t.List[ProposalListSchema]}, url_name="list_proposals")
-def list_proposals(request):
-    return 200, ProposalService.retrieve_all()
