@@ -6,6 +6,7 @@ api = NinjaAPI(
     title="MeetupSelector API",
     version="alpha",
     description="API for project https://github.com/pythonalicante/MeetupSelector/",
+    csrf=True,
 )
 
 api.add_router("/proposals_app/", proposals_router, tags=["Proposals"])

@@ -8,6 +8,7 @@ class UserBuilder:
     _description: str = "description"
     _is_staff: bool = False
     _date_joined: datetime = datetime.now()
+    _password: str = "Password10!"
 
     def with_email(self, email) -> "UserBuilder":
         self._email = email
@@ -25,10 +26,17 @@ class UserBuilder:
         self._date_joined = date_joined
         return self
 
+    def with_password(self, password: str) -> "UserBuilder":
+        self._password = password
+        return self
+
     def build(self) -> User:
-        return User.objects.create(
+        user: User = User.objects.create(
             email=self._email,
             description=self._description,
             is_staff=self._is_staff,
             date_joined=self._date_joined,
         )
+        user.set_password(self._password)
+        user.save()
+        return user

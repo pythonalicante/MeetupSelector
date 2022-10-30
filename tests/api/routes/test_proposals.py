@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
 import pytest
+from django.urls import reverse_lazy
 from django.utils.timezone import now
 from freezegun import freeze_time
 from hamcrest import (
@@ -14,7 +15,7 @@ from hamcrest import (
 )
 
 from meetupselector.proposals.models import Proposal
-from tests.utils.builders import TopicBuilder, UserBuilder
+from tests.utils.builders import ProposalBuilder, TopicBuilder, UserBuilder
 
 
 @freeze_time("2022-10-26 23:23:23")
@@ -95,3 +96,86 @@ def test_create_proposal(client, reverse_url):
     liked_by = created_proposal.liked_by.all()
     assert_that(liked_by, has_length(1))
     assert_that(liked_by.first().id, equal_to(fanboy.id))
+
+
+@freeze_time("2022-10-26 23:23:23")
+@pytest.mark.django_db
+def test_like_proposal(client):
+    subject = "anything"
+    password = "Password10!"
+    description = "Any description"
+    proposer = UserBuilder().with_email("a@a.com").build()
+    fanboy = UserBuilder().with_email("b@b.com").with_password(password).build()
+    topic = TopicBuilder().build()
+    proposal = (
+        ProposalBuilder()
+        .with_subject(subject)
+        .with_description(description)
+        .with_topics([topic])
+        .with_proposed_by(proposer)
+        .build()
+    )
+    url = reverse_lazy("api-alpha:like_proposal", kwargs={"proposal_id": proposal.id})
+    client.login(username=fanboy.email, password=password)
+
+    response = client.put(url, data={}, content_type="application/json")
+
+    assert_that(response.status_code, equal_to(HTTPStatus.NO_CONTENT))
+    proposal.refresh_from_db()
+    liked_by = proposal.liked_by.all()
+    assert_that(liked_by, has_length(1))
+    assert_that(liked_by.first().id, equal_to(fanboy.id))
+
+
+@freeze_time("2022-10-26 23:23:23")
+@pytest.mark.django_db
+def test_unlike_proposal(client):
+    subject = "anything"
+    password = "Password10!"
+    description = "Any description"
+    proposer = UserBuilder().with_email("a@a.com").build()
+    fanboy = UserBuilder().with_email("b@b.com").with_password(password).build()
+    topic = TopicBuilder().build()
+    proposal = (
+        ProposalBuilder()
+        .with_subject(subject)
+        .with_description(description)
+        .with_topics([topic])
+        .with_proposed_by(proposer)
+        .with_liked_by([fanboy])
+        .build()
+    )
+    url = reverse_lazy("api-alpha:like_proposal", kwargs={"proposal_id": proposal.id})
+    client.login(username=fanboy.email, password=password)
+
+    response = client.delete(url, data={}, content_type="application/json")
+
+    assert_that(response.status_code, equal_to(HTTPStatus.NO_CONTENT))
+    proposal.refresh_from_db()
+    liked_by = proposal.liked_by.all()
+    assert_that(liked_by, has_length(0))
+
+
+@freeze_time("2022-10-26 23:23:23")
+@pytest.mark.django_db
+def test_user_not_authenticated_like_proposal(client):
+    subject = "anything"
+    description = "Any description"
+    proposer = UserBuilder().with_email("a@a.com").build()
+    topic = TopicBuilder().build()
+    proposal = (
+        ProposalBuilder()
+        .with_subject(subject)
+        .with_description(description)
+        .with_topics([topic])
+        .with_proposed_by(proposer)
+        .build()
+    )
+    url = reverse_lazy("api-alpha:like_proposal", kwargs={"proposal_id": proposal.id})
+
+    response = client.put(url, data={}, content_type="application/json")
+
+    assert_that(response.status_code, equal_to(HTTPStatus.UNAUTHORIZED))
+    proposal.refresh_from_db()
+    liked_by = proposal.liked_by.all()
+    assert_that(liked_by, is_(empty()))
