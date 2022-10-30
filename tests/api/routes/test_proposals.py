@@ -127,6 +127,8 @@ def test_like_proposal(client):
     assert_that(liked_by.first().id, equal_to(fanboy.id))
 
 
+
+
 @freeze_time("2022-10-26 23:23:23")
 @pytest.mark.django_db
 def test_unlike_proposal(client):
@@ -179,3 +181,39 @@ def test_user_not_authenticated_like_proposal(client):
     proposal.refresh_from_db()
     liked_by = proposal.liked_by.all()
     assert_that(liked_by, is_(empty()))
+
+
+def test_get_list_proposals_exists(client, reverse_url):
+    url = reverse_url("list_proposals")
+    expected_payload = []
+
+    response = client.get(url)
+
+    assert_that(response.status_code, equal_to(HTTPStatus.CREATED))
+    assert_that(listed_proposales, has_length(0))
+
+    
+def test_list_proposals_endpoint_return_proposals(client, reverse_url):
+    proposal1 = (
+        ProposalBuilder()
+        .with_name("proposal1")
+        .with_description("first proposal description")
+        .build()
+    )
+    proposal2 = (
+        ProposalBuilder()
+        .with_name("proposal2")
+        .with_description("second proposal description")
+        .build()
+    )
+    url = reverse_url("list_proposals")
+    expected_payload = [
+        {"id": str(proposal1.id), "name": "proposal1"},
+        {"id": str(proposal2.id), "name": "proposal2"},
+    ]
+
+    listed_proposales = response.json()
+    response = client.get(url)
+
+    assert_that(response.status_code, equal_to(HTTPStatus.CREATED))
+    assert_that(listed_proposales, has_length(2))
