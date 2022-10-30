@@ -127,8 +127,6 @@ def test_like_proposal(client):
     assert_that(liked_by.first().id, equal_to(fanboy.id))
 
 
-
-
 @freeze_time("2022-10-26 23:23:23")
 @pytest.mark.django_db
 def test_unlike_proposal(client):
