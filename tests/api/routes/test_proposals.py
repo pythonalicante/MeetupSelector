@@ -1,6 +1,4 @@
-import uuid
 from http import HTTPStatus
-from re import sub
 
 import pytest
 from django.urls import reverse_lazy
@@ -123,6 +121,7 @@ def test_like_proposal(client):
     response = client.put(url, data={}, content_type="application/json")
 
     assert_that(response.status_code, equal_to(HTTPStatus.NO_CONTENT))
+    proposal.refresh_from_db()
     liked_by = proposal.liked_by.all()
     assert_that(liked_by, has_length(1))
     assert_that(liked_by.first().id, equal_to(fanboy.id))
@@ -152,5 +151,31 @@ def test_unlike_proposal(client):
     response = client.delete(url, data={}, content_type="application/json")
 
     assert_that(response.status_code, equal_to(HTTPStatus.NO_CONTENT))
+    proposal.refresh_from_db()
     liked_by = proposal.liked_by.all()
     assert_that(liked_by, has_length(0))
+
+
+@freeze_time("2022-10-26 23:23:23")
+@pytest.mark.django_db
+def test_user_not_authenticated_like_proposal(client):
+    subject = "anything"
+    description = "Any description"
+    proposer = UserBuilder().with_email("a@a.com").build()
+    topic = TopicBuilder().build()
+    proposal = (
+        ProposalBuilder()
+        .with_subject(subject)
+        .with_description(description)
+        .with_topics([topic])
+        .with_proposed_by(proposer)
+        .build()
+    )
+    url = reverse_lazy("api-alpha:like_proposal", kwargs={"proposal_id": proposal.id})
+
+    response = client.put(url, data={}, content_type="application/json")
+
+    assert_that(response.status_code, equal_to(HTTPStatus.UNAUTHORIZED))
+    proposal.refresh_from_db()
+    liked_by = proposal.liked_by.all()
+    assert_that(liked_by, is_(empty()))

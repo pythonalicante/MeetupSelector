@@ -41,17 +41,15 @@ def retrieve_all() -> QuerySet[Proposal]:
     return Proposal.objects.all()
 
 
-def like(proposal_id: UUID4, user_id: UUID4) -> bool:
+def like(proposal_id: UUID4, user_id: UUID4):
     user = get_object_or_404(User, pk=user_id)
     proposal_to_like = get_object_or_404(Proposal, pk=proposal_id)
     if user not in proposal_to_like.liked_by.all():
         proposal_to_like.liked_by.add(user)
-    return True
 
 
-def unlike(proposal_id: UUID4, user_id: UUID4) -> bool:
+def unlike(proposal_id: UUID4, user_id: UUID4):
     user = get_object_or_404(User, pk=user_id)
     proposal_to_like = get_object_or_404(Proposal, pk=proposal_id)
     if user in proposal_to_like.liked_by.all():
         proposal_to_like.liked_by.remove(user)
-    return True

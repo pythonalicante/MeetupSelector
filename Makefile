@@ -79,3 +79,8 @@ shell:
 .PHONY: makemigrations
 makemigrations:
 	${PRE_RUN_API_COMMAND} makemigrations
+
+# target: apply_black_isort - Run black and isort
+apply_black_isort:
+	${LAUNCH_IN_VENV} black ${PACKAGE_NAME} tests
+	${LAUNCH_IN_VENV} isort ${PACKAGE_NAME} tests

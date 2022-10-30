@@ -1,10 +1,7 @@
-from uuid import uuid4
-
-from ninja import ModelSchema, Schema
+from ninja import ModelSchema
 from pydantic import UUID4
 
 from meetupselector.proposals.models import Proposal
-from meetupselector.proposals.services.proposal import like
 
 from .talks import TopicRetrieveSchema
 
@@ -46,7 +43,3 @@ class ProposalRetrieveSchema(ModelSchema):
             "liked_by",
             "done",
         ]
-
-
-class ProposalLikeSchema(Schema):
-    ok: bool = False

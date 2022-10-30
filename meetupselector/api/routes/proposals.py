@@ -4,7 +4,6 @@ from pydantic import UUID4
 
 from meetupselector.api.schemas.proposals import (
     ProposalCreateSchema,
-    ProposalLikeSchema,
     ProposalRetrieveSchema,
 )
 from meetupselector.proposals.services import ProposalService
