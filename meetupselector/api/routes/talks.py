@@ -1,4 +1,3 @@
-import logging
 import typing as t
 
 from ninja import Router
@@ -6,8 +5,6 @@ from pydantic import UUID4
 
 from meetupselector.api.schemas.talks import TopicListSchema, TopicRetrieveSchema
 from meetupselector.talks.services import TopicService
-
-logger = logging.getLogger(__name__)
 
 router = Router()
 
