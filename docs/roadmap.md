@@ -1,7 +1,7 @@
 # Roadmap
 * MVP (Propuestas y Landing Page)
 	* [Como usuario registrado, quiero hacer una propuesta de evento.](https://tree.taiga.io/project/aalmiramolla-meetupselector/us/3)
-	* [Como usuario, quiero añadir un me gusta a una proposal o quitarlo.](https://tree.taiga.io/project/aalmiramolla-meetupselector/us/6)
+	* [Como usuario registrado, quiero añadir un me gusta a una proposal o quitarlo.](https://tree.taiga.io/project/aalmiramolla-meetupselector/us/6)
 	* [Como administrador, quiero crear un evento para una propuesta.](https://tree.taiga.io/project/aalmiramolla-meetupselector/us/14)
 	* [Como administrador, quiero añadir un Evento sin necesidad de estar vinculada a una propuesta.](https://tree.taiga.io/project/aalmiramolla-meetupselector/us/31)
 	* [Como usuario, quiero registrarme en el sistema con mi email.](https://tree.taiga.io/project/aalmiramolla-meetupselector/us/52)
