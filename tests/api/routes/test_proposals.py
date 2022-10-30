@@ -185,7 +185,6 @@ def test_user_not_authenticated_like_proposal(client):
 @pytest.mark.django_db
 def test_get_list_proposals_exists(client, reverse_url):
     url = reverse_url("create_list_proposal")
-    expected_payload = []
 
     response = client.get(url)
 
@@ -196,13 +195,13 @@ def test_get_list_proposals_exists(client, reverse_url):
 @freeze_time("2022-10-26 23:23:23")
 @pytest.mark.django_db
 def test_list_proposals_endpoint_return_proposals(client, reverse_url):
-    proposal1 = (
+    (
         ProposalBuilder()
         .with_subject("proposal1")
         .with_description("first proposal description")
         .build()
     )
-    proposal2 = (
+    (
         ProposalBuilder()
         .with_subject("proposal2")
         .with_description("second proposal description")
