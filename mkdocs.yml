@@ -20,6 +20,7 @@ nav:
 
 theme:
   name: material
+  logo: img/PythonAlicanteLogo.png
   features:
     - navigation.tabs
     - navigation.instant
