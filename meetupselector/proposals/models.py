@@ -63,3 +63,24 @@ class Proposal(models.Model):
 
     def __str__(self) -> str:
         return self.subject
+
+
+class Event(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=255, verbose_name=_("name"))
+    description = models.TextField(verbose_name=_("description"))
+    location = models.CharField(max_length=255, verbose_name=_("location"))
+    meetup_link = models.CharField(max_length=255, verbose_name=_("meetup_link"))
+    done = models.BooleanField(
+        default=False,
+        verbose_name=_("done"),
+    )
+
+    class Meta:
+        verbose_name = _("event")
+        verbose_name_plural = _("events")
+
+    def __str__(self) -> str:
+        return self.name

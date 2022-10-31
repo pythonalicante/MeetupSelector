@@ -27,6 +27,16 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, password, **extra_fields)
 
+    def create_staffuser(self, email, password, **extra_fields):
+        """Create a superuser."""
+        extra_fields.setdefault("is_superuser", False)
+        extra_fields.setdefault("is_staff", True)
+
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Staffuser must have is_staff=True.")
+
+        return self._create_user(email, password, **extra_fields)
+
     def create_superuser(self, email, password, **extra_fields):
         """Create a superuser."""
         extra_fields.setdefault("is_superuser", True)
@@ -53,6 +63,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     date_joined: models.DateTimeField = models.DateTimeField(_("date_joined"), auto_now_add=True)
     is_staff: models.BooleanField = models.BooleanField(_("is_staff"), default=False)
+    is_superuser: models.BooleanField = models.BooleanField(_("is_superuser"), default=False)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS: list[str] = []

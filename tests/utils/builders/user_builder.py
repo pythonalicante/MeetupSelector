@@ -4,9 +4,10 @@ from meetupselector.user.models import User
 
 
 class UserBuilder:
-    _email: str = "topic"
+    _email: str = "email@e.com"
     _description: str = "description"
     _is_staff: bool = False
+    _is_superuser: bool = False
     _date_joined: datetime = datetime.now()
     _password: str = "Password10!"
 
@@ -18,8 +19,12 @@ class UserBuilder:
         self._description = description
         return self
 
-    def with_is_Staff(self, is_Staff: bool) -> "UserBuilder":
-        self._is_Staff = is_Staff
+    def with_is_Staff(self, is_staff: bool) -> "UserBuilder":
+        self._is_staff = is_staff
+        return self
+
+    def with_is_superuser(self, is_superuser: bool) -> "UserBuilder":
+        self._is_superuser = is_superuser
         return self
 
     def with_date_joined(self, date_joined: datetime) -> "UserBuilder":
@@ -31,12 +36,11 @@ class UserBuilder:
         return self
 
     def build(self) -> User:
-        user: User = User.objects.create(
-            email=self._email,
-            description=self._description,
-            is_staff=self._is_staff,
-            date_joined=self._date_joined,
-        )
+        user, created = User.objects.get_or_create(email=self._email)
         user.set_password(self._password)
+        user.description = self._description
+        user.is_staff = self._is_staff
+        user.is_superuser = self._is_superuser
+        user.date_joined = self._date_joined
         user.save()
         return user
