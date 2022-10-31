@@ -1,6 +1,3 @@
-from django.db.models import QuerySet
-from pydantic import UUID4
-
 from ..models import Event
 
 

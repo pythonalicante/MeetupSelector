@@ -1,7 +1,6 @@
 from http import HTTPStatus
 
 import pytest
-from django.urls import reverse_lazy
 from django.utils.timezone import now
 from freezegun import freeze_time
 from hamcrest import (
@@ -92,8 +91,6 @@ def test_is_not_staff_create_event(client, reverse_url):
         "meetup_link": meetup_link,
         "location": location,
     }
-    expected_creation_datetime = now()
-    expected_creation_datetime_str = "2022-10-26T23:23:23Z"
     events_before_creation = list(Event.objects.all())
     password = "Password10!"
     staff_user = (
