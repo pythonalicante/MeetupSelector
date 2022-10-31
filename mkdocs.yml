@@ -10,6 +10,8 @@ edit_uri: edit/main/docs/
 
 nav:
   - Home: 'index.md'
+  - Architecture:
+    - 'architecture/index.md'
   - Roadmap: 'roadmap.md'
   - About:
     - 'about_us/index.md'
