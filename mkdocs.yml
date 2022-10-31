@@ -5,6 +5,8 @@ dev_addr: 127.0.0.1:8001
 
 repo_url: https://github.com/pythonalicante/MeetupSelector/
 repo_name: pythonalicante/MeetupSelector
+edit_uri: edit/main/docs/
+
 
 nav:
   - Home: 'index.md'
