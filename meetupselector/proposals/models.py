@@ -72,7 +72,7 @@ class Event(models.Model):
     name = models.CharField(max_length=255, verbose_name=_("name"))
     description = models.TextField(verbose_name=_("description"))
     location = models.CharField(max_length=255, verbose_name=_("location"))
-    meetup_link = models.CharField(max_length=255, verbose_name=_("meetup_link"))
+    meetup_link = models.URLField(max_length=255, verbose_name=_("meetup_link"))
     done = models.BooleanField(
         default=False,
         verbose_name=_("done"),

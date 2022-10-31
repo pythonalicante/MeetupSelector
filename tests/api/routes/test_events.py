@@ -23,7 +23,7 @@ def test_is_staff_create_event(client, reverse_url):
     url = reverse_url("event")
     name = "eventName"
     description = "description"
-    meetup_link = "meetup_link"
+    meetup_link = "https://www.meetup.com/"
     location = "location"
     payload = {
         "name": name,
@@ -83,7 +83,7 @@ def test_is_not_staff_create_event(client, reverse_url):
     url = reverse_url("event")
     name = "eventName"
     description = "description"
-    meetup_link = "meetup_link"
+    meetup_link = "https://www.meetup.com/"
     location = "location"
     payload = {
         "name": name,

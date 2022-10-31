@@ -36,7 +36,7 @@ class UserBuilder:
         return self
 
     def build(self) -> User:
-        user, created = User.objects.get_or_create(email=self._email)
+        user = User.objects.create(email=self._email)
         user.set_password(self._password)
         user.description = self._description
         user.is_staff = self._is_staff
