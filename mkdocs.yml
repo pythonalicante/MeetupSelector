@@ -12,6 +12,11 @@ nav:
   - Home: 'index.md'
   - Architecture:
     - 'architecture/index.md'
+  - How to contribute:
+    - 'contribute/index.md'
+    - Tasks: 'contribute/tasks.md'
+    - Code Style: 'contribute/code_style.md'
+    - Git: 'contribute/git.md'
   - Roadmap: 'roadmap.md'
   - About:
     - 'about_us/index.md'
