@@ -1,13 +1,19 @@
-# Home
+---
+hide:
+  - footer
+  - toc
+  - navigation
+---
 
-This documentation is in progress.
+<center>
+# Welcome to Meetup Selector.
+![logo_python_alicante](./img/PythonAlicanteLogo.png)
+</center>
+
+The aim of this project is to provide to communities a way to select the topic for the next Meetup.
+
+It also provides a "Landing Page", Talks, Speakers and more things to make the management of a community easiest.
+
+> This documentation is in progress.
 
 
-## Architecture (C4) diagram
-![architecture-alt](./diagrams/out/architecture.png)
-
-## Use Cases diagram
-![use-cases-alt](./diagrams/out/use_cases.png)
-
-## Entity Relation diagram
-![entity-relation-alt](./diagrams/out/entity-relation.png)
