@@ -36,11 +36,11 @@ class UserBuilder:
         return self
 
     def build(self) -> User:
-        user = User.objects.create(email=self._email)
-        user.set_password(self._password)
-        user.description = self._description
-        user.is_staff = self._is_staff
-        user.is_superuser = self._is_superuser
-        user.date_joined = self._date_joined
-        user.save()
-        return user
+        return User.objects.create_user(
+            email=self._email,
+            password=self._password,
+            description=self._description,
+            is_staff=self._is_staff,
+            is_superuser=self._is_superuser,
+            date_joined=self._date_joined,
+        )
