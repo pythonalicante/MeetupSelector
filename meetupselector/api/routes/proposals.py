@@ -5,11 +5,13 @@ from ninja.security import django_auth
 from pydantic import UUID4
 
 from meetupselector.api.schemas.proposals import (
+    EventCreateSchema,
+    EventRetrieveSchema,
     ProposalCreateSchema,
     ProposalListSchema,
     ProposalRetrieveSchema,
 )
-from meetupselector.proposals.services import ProposalService
+from meetupselector.proposals.services import EventService, ProposalService
 
 router = Router(auth=django_auth)
 
@@ -49,3 +51,15 @@ def unlike_proposal(request, proposal_id: UUID4):
     user = request.auth
     ProposalService.unlike(proposal_id, user.id)
     return 204, None
+
+
+@router.post(
+    "/event",
+    response={201: EventRetrieveSchema, 401: None},
+    url_name="event",
+)
+def create_event(request, event: EventCreateSchema):
+    user = request.user
+    if user.is_staff:
+        return 201, EventService.create(**event.dict())
+    return 401, None

@@ -1,7 +1,7 @@
 from ninja import ModelSchema
 from pydantic import UUID4
 
-from meetupselector.proposals.models import Proposal
+from meetupselector.proposals.models import Event, Proposal
 
 from .talks import TopicRetrieveSchema
 
@@ -58,4 +58,31 @@ class ProposalListSchema(ModelSchema):
             "difficulty",
             "language",
             "topics",
+        ]
+
+
+class EventCreateSchema(ModelSchema):
+    class Config:
+        model = Event
+        model_fields = [
+            "name",
+            "description",
+            "meetup_link",
+            "location",
+            "done",
+        ]
+
+
+class EventRetrieveSchema(ModelSchema):
+    class Config:
+        model = Event
+        model_fields = [
+            "id",
+            "created_at",
+            "updated_at",
+            "name",
+            "description",
+            "meetup_link",
+            "location",
+            "done",
         ]
