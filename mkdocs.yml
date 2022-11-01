@@ -10,14 +10,14 @@ edit_uri: edit/main/docs/
 
 nav:
   - Home: 'index.md'
-  - Architecture:
-    - 'architecture/index.md'
   - How to contribute:
     - 'contribute/index.md'
     - Tasks: 'contribute/tasks.md'
     - Code Style: 'contribute/code_style.md'
     - Git: 'contribute/git.md'
   - Roadmap: 'roadmap.md'
+  - Architecture:
+    - 'architecture/index.md'
   - About:
     - 'about_us/index.md'
     - License: 'about_us/license.md'
@@ -47,6 +47,14 @@ theme:
 markdown_extensions:
   - footnotes
   - tables
+  - attr_list
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
 
 extra:
   social:
