@@ -1,6 +1,6 @@
 from ninja import NinjaAPI
 
-from .routes import proposals_router, topics_router, users_router
+from .routes import events_router, proposals_router, topics_router, users_router
 
 api = NinjaAPI(
     title="MeetupSelector API",
@@ -9,6 +9,7 @@ api = NinjaAPI(
     csrf=True,
 )
 
+api.add_router("/events/", events_router, tags=["Events"])
 api.add_router("/proposals/", proposals_router, tags=["Proposals"])
 api.add_router("/topics/", topics_router, tags=["Topics"])
 api.add_router("/users/", users_router, tags=["Users"])
