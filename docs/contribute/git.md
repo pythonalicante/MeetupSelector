@@ -10,8 +10,8 @@ We use __Forking Workflow__[^doc-4] to collaborate in this project.
 4. Push your changes to your `branch`.
 5. Open the Pull Request.[^doc-5]
 
-
-> Each Pull Request must be on top of `main` branch to merge it. In order to achieve this, you have to sync your fork[^doc-2] and rebase[^doc-3] the `main` branch.
+!!! caution
+	Each Pull Request must be on top of `main` branch to merge it. In order to achieve this, you have to sync your fork[^doc-2] and rebase[^doc-3] the `main` branch.
 
 
 ## How to write a commit
@@ -28,23 +28,22 @@ All the commits should follow the format of __Conventional Commits__[^commit-1],
 
 ### How to write a good commit message
 
-> Disclaimer: This section is a summary of [cbeams](https://cbea.ms/author/cbeams/) article: [How to write a Git Commit message](https://cbea.ms/git-commit/)
+!!! note "Disclaimer"
 
-- TL;DR:
->
-> The commit subject must complete the next sentence:
->
-> __If applied, this commit will <u>your subject line here</u>__
->
->Example:
->
->* If applied, this commit will update getting started documentation
->
->* If applied, this commit will remove deprecated methods
->
->* If applied, this commit will release version 1.0.0
->
->* If applied, this commit will merge pull request #123 from user/branch
+	This section is a summary of [cbeams](https://cbea.ms/author/cbeams/) article: [How to write a Git Commit message](https://cbea.ms/git-commit/)
+
+!!! note "TL;DR"
+
+	The commit subject must complete the next sentence:
+
+	__If applied, this commit will <u>your subject line here</u>__
+
+	Example:
+
+	* If applied, this commit will update getting started documentation
+	* If applied, this commit will remove deprecated methods
+	* If applied, this commit will release version 1.0.0
+	* If applied, this commit will merge pull request #123 from user/branch
 
 To write a good commit message, it should follow the next directives:
 
