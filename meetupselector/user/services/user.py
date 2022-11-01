@@ -1,4 +1,5 @@
-from django.contrib.auth import authenticate, login as django_login
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as django_login
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.http import HttpRequest
 

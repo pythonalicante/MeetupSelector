@@ -19,7 +19,7 @@ from tests.utils.builders import UserBuilder
 
 @pytest.mark.django_db
 class TestUserLogin:
-    def test_succesful_login(client, reverse_url):
+    def test_succesful_login(self, client, reverse_url):
         email = "registered@user.com"
         password = "aaa"
         UserBuilder().with_email(email).with_password(password).build()
@@ -33,7 +33,7 @@ class TestUserLogin:
         assert_that(client.cookies, is_not(empty()))
         assert_that(response.status_code, equal_to(HTTPStatus.OK))
 
-    def test_bad_credentials_login(client, reverse_url):
+    def test_bad_credentials_login(self, client, reverse_url):
         email = "registered@user.com"
         password = "aaa"
         UserBuilder().with_email(email).with_password(password).build()
@@ -50,7 +50,7 @@ class TestUserLogin:
         assert_that(client.cookies, empty())
         assert_that(response.status_code, equal_to(HTTPStatus.UNAUTHORIZED))
 
-    def test_inexistent_user_login(client, reverse_url):
+    def test_inexistent_user_login(self, client, reverse_url):
         email = "nonregistered@user.com"
         password = "aaa"
 

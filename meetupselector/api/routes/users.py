@@ -13,13 +13,12 @@ router = Router(auth=django_auth)
 def login(request, credentials: LoginSchema, auth=None):
     user = UserService.login(
         request=request,
-        email=credentials.email,
-        password=credentials.password,
+        email=credentials.email,  # type: ignore
+        password=credentials.password,  # type: ignore
     )
     if user is None:
         return HTTPStatus.UNAUTHORIZED, None
-    else:
-        return HTTPStatus.OK, None
+    return HTTPStatus.OK, None
 
 
 @router.post("/users", response={HTTPStatus.CREATED: None}, url_name="create_user", auth=None)
