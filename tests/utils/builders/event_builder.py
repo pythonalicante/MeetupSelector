@@ -4,7 +4,7 @@ from meetupselector.proposals.models import Event
 class EventBuilder:
     _name: str = "name"
     _description: str = "description"
-    _meetup_link: str = "meetup_link"
+    _meetup_link: str = "https://www.meetup.com/"
     _location: str = "location"
 
     def with_name(self, name: str) -> "EventBuilder":
