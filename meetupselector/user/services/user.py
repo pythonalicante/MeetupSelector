@@ -4,6 +4,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.http import HttpRequest
 
 from ..models import User
+from ..schemas import SignInSchema
 
 
 def login(request: HttpRequest, email: str, password: str) -> AbstractBaseUser | None:
@@ -15,7 +16,9 @@ def login(request: HttpRequest, email: str, password: str) -> AbstractBaseUser |
     return user
 
 
-def create(email: str, password: str):
-    user = User.objects.create(email=email, is_active=False)
-    user.set_password(password)
-    user.save()
+def create(signin_data: SignInSchema):
+    User.objects.create_user(
+        email=signin_data.email,
+        password=signin_data.password,
+        is_active=False,
+    )
