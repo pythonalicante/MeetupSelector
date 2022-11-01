@@ -53,6 +53,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     date_joined: models.DateTimeField = models.DateTimeField(_("date_joined"), auto_now_add=True)
     is_staff: models.BooleanField = models.BooleanField(_("is_staff"), default=False)
+    is_active = models.BooleanField(_("is_active"), default=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS: list[str] = []
