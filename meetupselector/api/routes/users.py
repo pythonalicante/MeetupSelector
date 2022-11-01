@@ -11,6 +11,7 @@ router = Router()
 @router.post("/login", response={HTTPStatus.OK: None, HTTPStatus.UNAUTHORIZED: None}, auth=None)
 def login(request, credentials: LoginSchema, auth=None):
     user = AuthenticationService.login(
+        request=request,
         email=credentials.email,
         password=credentials.password,
     )
