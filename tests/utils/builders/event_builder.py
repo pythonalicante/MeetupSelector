@@ -1,8 +1,4 @@
-from django.contrib.auth import get_user_model
-
 from meetupselector.proposals.models import Event
-
-User = get_user_model()
 
 
 class EventBuilder:
