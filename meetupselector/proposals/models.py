@@ -73,10 +73,9 @@ class Event(models.Model):
     description = models.TextField(verbose_name=_("description"))
     location = models.CharField(max_length=255, verbose_name=_("location"))
     meetup_link = models.URLField(max_length=255, verbose_name=_("meetup_link"))
-    done = models.BooleanField(
-        default=False,
-        verbose_name=_("done"),
-    )
+    date = models.DateField(verbose_name=_("date"))
+    start_time = models.TimeField(verbose_name=_("start_time"))
+    duration = models.DurationField(verbose_name=_("duration"))
 
     class Meta:
         verbose_name = _("event")
