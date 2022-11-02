@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: View the issues in Taiga
+    url: https://tree.taiga.io/project/aalmiramolla-meetupselector/issues
+    about: To open an Issue in Taiga, you must be registered on the platform.
