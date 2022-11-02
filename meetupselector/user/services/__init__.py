@@ -1,1 +1,1 @@
-from . import authentication as AuthenticationService  # noqa: F401
+from . import user as UserService  # noqa: F401
