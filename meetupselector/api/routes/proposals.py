@@ -6,6 +6,7 @@ from pydantic import UUID4
 
 from meetupselector.api.schemas.proposals import (
     EventCreateSchema,
+    EventListSchema,
     EventRetrieveSchema,
     ProposalCreateSchema,
     ProposalListSchema,
@@ -53,10 +54,20 @@ def unlike_proposal(request, proposal_id: UUID4):
     return 204, None
 
 
+@router.get(
+    "/event",
+    response={200: t.List[EventListSchema]},
+    url_name="create_list_event",
+    auth=None,
+)
+def list_events(request):
+    return 200, EventService.retrieve_all()
+
+
 @router.post(
     "/event",
     response={201: EventRetrieveSchema, 401: None},
-    url_name="event",
+    url_name="create_list_event",
 )
 def create_event(request, event: EventCreateSchema):
     user = request.user

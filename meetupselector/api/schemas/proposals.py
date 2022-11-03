@@ -69,7 +69,9 @@ class EventCreateSchema(ModelSchema):
             "description",
             "meetup_link",
             "location",
-            "done",
+            "date",
+            "start_time",
+            "duration",
         ]
 
 
@@ -84,5 +86,24 @@ class EventRetrieveSchema(ModelSchema):
             "description",
             "meetup_link",
             "location",
-            "done",
+            "date",
+            "start_time",
+            "duration",
+        ]
+
+
+class EventListSchema(ModelSchema):
+    class Config:
+        model = Event
+        model_fields = [
+            "id",
+            "created_at",
+            "updated_at",
+            "name",
+            "description",
+            "meetup_link",
+            "location",
+            "date",
+            "start_time",
+            "duration",
         ]
