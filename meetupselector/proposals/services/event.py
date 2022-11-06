@@ -1,3 +1,7 @@
+from datetime import datetime, time, timedelta
+
+from django.db.models import QuerySet
+
 from ..models import Event
 
 
@@ -6,15 +10,23 @@ def create(
     description: str,
     meetup_link: str,
     location: str,
-    done: bool,
+    date: datetime,
+    start_time: time,
+    duration: timedelta,
 ) -> Event:
     event = Event(
         name=name,
         description=description,
         meetup_link=meetup_link,
         location=location,
-        done=done,
+        date=date,
+        start_time=start_time,
+        duration=duration,
     )
     event.save()
 
     return event
+
+
+def retrieve_all() -> QuerySet[Event]:
+    return Event.objects.all()
