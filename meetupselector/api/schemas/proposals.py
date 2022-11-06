@@ -93,6 +93,8 @@ class EventRetrieveSchema(ModelSchema):
 
 
 class EventListSchema(ModelSchema):
+    duration_seconds: int
+
     class Config:
         model = Event
         model_fields = [
@@ -105,5 +107,4 @@ class EventListSchema(ModelSchema):
             "location",
             "date",
             "start_time",
-            "duration",
         ]
