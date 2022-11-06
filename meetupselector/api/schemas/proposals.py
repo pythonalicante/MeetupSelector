@@ -18,9 +18,6 @@ class ProposalCreateSchema(ModelSchema):
             "description",
             "difficulty",
             "language",
-            "topics",
-            "proposed_by",
-            "liked_by",
             "done",
         ]
 
@@ -38,7 +35,6 @@ class ProposalRetrieveSchema(ModelSchema):
             "description",
             "difficulty",
             "language",
-            "topics",
             "proposed_by",
             "liked_by",
             "done",
@@ -57,7 +53,6 @@ class ProposalListSchema(ModelSchema):
             "subject",
             "difficulty",
             "language",
-            "topics",
         ]
 
 
