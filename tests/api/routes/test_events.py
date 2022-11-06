@@ -166,7 +166,7 @@ def test_list_events_endpoint_return_events(client, reverse_url):
             "location": event1.location,
             "date": "2022-10-31",
             "start_time": "23:23:23",
-            "duration": "P0DT02H00M00S",
+            "duration_seconds": event1.duration_seconds,
         },
         {
             "id": str(event2.id),
@@ -178,7 +178,7 @@ def test_list_events_endpoint_return_events(client, reverse_url):
             "location": event2.location,
             "date": "2022-10-31",
             "start_time": "23:23:23",
-            "duration": "P0DT02H00M00S",
+            "duration_seconds": event1.duration_seconds,
         },
     ]
     url = reverse_url("create_list_event")
