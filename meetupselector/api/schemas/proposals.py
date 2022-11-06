@@ -1,4 +1,4 @@
-from ninja import ModelSchema
+from ninja import Field, ModelSchema
 from pydantic import UUID4
 
 from meetupselector.proposals.models import Event, Proposal
@@ -76,6 +76,8 @@ class EventCreateSchema(ModelSchema):
 
 
 class EventRetrieveSchema(ModelSchema):
+    duration: int = Field(alias="duration_seconds")
+
     class Config:
         model = Event
         model_fields = [
@@ -88,12 +90,11 @@ class EventRetrieveSchema(ModelSchema):
             "location",
             "date",
             "start_time",
-            "duration",
         ]
 
 
 class EventListSchema(ModelSchema):
-    duration_seconds: int
+    duration: int = Field(alias="duration_seconds")
 
     class Config:
         model = Event

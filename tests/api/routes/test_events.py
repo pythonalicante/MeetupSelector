@@ -1,4 +1,4 @@
-from datetime import datetime, time, timedelta
+from datetime import timedelta
 from http import HTTPStatus
 
 import pytest
@@ -27,17 +27,17 @@ def test_is_staff_create_event(client, reverse_url):
     description = "description"
     meetup_link = "https://www.meetup.com/"
     location = "location"
-    date = datetime.now() + timedelta(days=5)
-    start_time = datetime.now()
+    date = (now() + timedelta(days=5)).date()
+    start_time = now().time()
     duration = timedelta(hours=2)
     payload = {
         "name": name,
         "description": description,
         "meetup_link": meetup_link,
         "location": location,
-        "date": date,
-        "start_time": start_time,
-        "duration": duration,
+        "date": str(date),
+        "start_time": str(start_time),
+        "duration": duration.seconds,
     }
     expected_creation_datetime = now()
     expected_creation_datetime_str = "2022-10-26T23:23:23Z"
@@ -67,12 +67,13 @@ def test_is_staff_create_event(client, reverse_url):
                 "description": description,
                 "meetup_link": meetup_link,
                 "location": location,
-                "date": date,
-                "start_time": start_time,
-                "duration": duration,
+                "date": str(date),
+                "start_time": str(start_time),
+                "duration": duration.seconds,
             }
         ),
     )
+    # breakpoint()
     assert_that(
         created_event,
         has_properties(
@@ -98,8 +99,8 @@ def test_is_not_staff_create_event(client, reverse_url):
     description = "description"
     meetup_link = "https://www.meetup.com/"
     location = "location"
-    date = datetime.now() + timedelta(days=5)
-    start_time = datetime.now().time()
+    date = str((now() + timedelta(days=5)).date())
+    start_time = str(now().time())
     duration = timedelta(hours=2)
     payload = {
         "name": name,
@@ -108,7 +109,7 @@ def test_is_not_staff_create_event(client, reverse_url):
         "location": location,
         "date": date,
         "start_time": start_time,
-        "duration": duration,
+        "duration": duration.seconds,
     }
     events_before_creation = list(Event.objects.all())
     password = "Password10!"
@@ -135,8 +136,8 @@ def test_list_events_endpoint_return_events(client, reverse_url):
         .with_description("first event description")
         .with_meetup_link("https://www.meetup.com/event1")
         .with_location("first event location")
-        .with_date(datetime.now() + timedelta(days=5))
-        .with_start_time(datetime.now().time())
+        .with_date(now() + timedelta(days=5))
+        .with_start_time(now().time())
         .with_duration(timedelta(hours=2))
         .build()
     )
@@ -146,15 +147,12 @@ def test_list_events_endpoint_return_events(client, reverse_url):
         .with_description("second event description")
         .with_meetup_link("https://www.meetup.com/event2")
         .with_location("second event location")
-        .with_date(datetime.now() + timedelta(days=5))
-        .with_start_time(datetime.now().time())
+        .with_date(now() + timedelta(days=5))
+        .with_start_time(now().time())
         .with_duration(timedelta(hours=2))
         .build()
     )
     expected_creation_datetime_str = "2022-10-26T23:23:23Z"
-    date = datetime.now() + timedelta(days=5)
-    start_time = datetime.now().time()
-    duration = timedelta(hours=2)
     expected_payload = [
         {
             "id": str(event1.id),
@@ -166,7 +164,7 @@ def test_list_events_endpoint_return_events(client, reverse_url):
             "location": event1.location,
             "date": "2022-10-31",
             "start_time": "23:23:23",
-            "duration_seconds": event1.duration_seconds,
+            "duration": event1.duration_seconds,
         },
         {
             "id": str(event2.id),
@@ -178,7 +176,7 @@ def test_list_events_endpoint_return_events(client, reverse_url):
             "location": event2.location,
             "date": "2022-10-31",
             "start_time": "23:23:23",
-            "duration_seconds": event1.duration_seconds,
+            "duration": event2.duration_seconds,
         },
     ]
     url = reverse_url("create_list_event")
@@ -186,7 +184,6 @@ def test_list_events_endpoint_return_events(client, reverse_url):
     response = client.get(url)
     listed_events = response.json()
 
-    assert_that(response.status_code, equal_to(HTTPStatus.OK))
     assert_that(response.status_code, equal_to(HTTPStatus.OK))
     assert_that(listed_events, has_length(2))
     assert_that(
