@@ -12,7 +12,7 @@ from meetupselector.api.schemas.proposals import (
     ProposalListSchema,
     ProposalRetrieveSchema,
 )
-from meetupselector.proposals.services import ProposalService
+from meetupselector.proposals.services import EventService, ProposalService
 
 router = Router(auth=django_auth)
 
