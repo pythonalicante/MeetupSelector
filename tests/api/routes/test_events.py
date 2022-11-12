@@ -21,7 +21,7 @@ from tests.utils.builders import EventBuilder, UserBuilder
 
 @freeze_time("2022-10-26 23:23:23")
 @pytest.mark.django_db
-def test_is_staff_create_event(client, reverse_url):
+def test_staff_user_can_create_event(client, reverse_url):
     url = reverse_url("create_list_event")
     name = "eventName"
     description = "description"
@@ -73,7 +73,6 @@ def test_is_staff_create_event(client, reverse_url):
             }
         ),
     )
-    # breakpoint()
     assert_that(
         created_event,
         has_properties(
@@ -93,7 +92,7 @@ def test_is_staff_create_event(client, reverse_url):
 
 @freeze_time("2022-10-26 23:23:23")
 @pytest.mark.django_db
-def test_is_not_staff_create_event(client, reverse_url):
+def test_no_staff_user_can_create_event(client, reverse_url):
     url = reverse_url("create_list_event")
     name = "eventName"
     description = "description"
