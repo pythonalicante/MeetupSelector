@@ -234,3 +234,5 @@ CELERY_TIMEZONE = "UTC"
 
 API_VERSION = "alpha"
 API_NAMESPACE = f"api-{API_VERSION}"
+
+CONFIRMATION_URL_NAME = "signin_confirmation"

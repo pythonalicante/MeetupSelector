@@ -9,8 +9,6 @@ from meetupselector.api.schemas.users import LoginSchema
 from meetupselector.user.schemas import SignInSchema
 from meetupselector.user.services import UserService
 
-confirmation_url_name = "signin_confirmation"
-
 router = Router(auth=django_auth)
 
 
@@ -29,14 +27,14 @@ def login(request, credentials: LoginSchema, auth=None):
 @router.post("/users", response={HTTPStatus.CREATED: None}, url_name="create_user", auth=None)
 def create_user(_, credentials: SignInSchema):
     api_namespace = settings.API_NAMESPACE
-    confirmation_url = reverse(f"{api_namespace}:{confirmation_url_name}")
+    confirmation_url = reverse(f"{api_namespace}:{settings.CONFIRMATION_URL_NAME}")
     return HTTPStatus.CREATED, UserService.create(credentials, confirmation_url)
 
 
 @router.get(
     "/signin_confirmation",
     response={HTTPStatus.OK: None},
-    url_name=confirmation_url_name,
+    url_name=settings.CONFIRMATION_URL_NAME,
     auth=None,
 )
 def activate_user(_):

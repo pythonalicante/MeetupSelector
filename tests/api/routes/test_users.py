@@ -2,6 +2,7 @@ from http import HTTPStatus
 from unittest.mock import patch
 
 import pytest
+from django.conf import settings
 from django.contrib.auth import authenticate
 from hamcrest import (
     assert_that,
@@ -14,7 +15,6 @@ from hamcrest import (
     none,
 )
 
-from meetupselector.api.routes.users import confirmation_url_name
 from meetupselector.user.models import User
 from tests.utils.builders import UserBuilder
 
@@ -115,7 +115,7 @@ class TestUserSignIn:
         email = "luke@starwars.com"
         password = "Any_Valid_P4ssw@rd"
         url = reverse_url("create_user")
-        confirmation_url = reverse_url(confirmation_url_name)
+        confirmation_url = reverse_url(settings.CONFIRMATION_URL_NAME)
         payload = {
             "email": email,
             "password": password,

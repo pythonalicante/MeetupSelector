@@ -1,9 +1,9 @@
 from unittest.mock import patch
 
 import pytest
+from django.conf import settings
 from django.test import override_settings
 
-from meetupselector.api.routes.users import confirmation_url_name
 from meetupselector.user.tasks import send_registration_mail
 from tests.utils.builders import UserBuilder
 
@@ -18,7 +18,7 @@ class TestSendRegistrationEmail:
         self, send_templated_email, reverse_url
     ):
         user = UserBuilder().with_email("some@email.xxx").with_password("aaa").build()
-        confirmation_url = reverse_url(confirmation_url_name)
+        confirmation_url = reverse_url(settings.CONFIRMATION_URL_NAME)
         expected_context = {
             "project_name": "my_fancy_project",
             "confirmation_url": confirmation_url,
