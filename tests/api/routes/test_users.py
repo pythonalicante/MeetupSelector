@@ -14,6 +14,7 @@ from hamcrest import (
     none,
 )
 
+from meetupselector.api.routes.users import confirmation_url_name
 from meetupselector.user.models import User
 from tests.utils.builders import UserBuilder
 
@@ -110,10 +111,11 @@ class TestUserSignIn:
         assert_that(users_after_creation, is_(empty()))
 
     @patch("meetupselector.user.services.user.send_registration_mail")
-    def test_create_user_with_valid_payload(self, mail_task, client, reverse_url):
+    def test_create_user_with_valid_payload(self, send_registration_mail_task, client, reverse_url):
         email = "luke@starwars.com"
         password = "Any_Valid_P4ssw@rd"
         url = reverse_url("create_user")
+        confirmation_url = reverse_url(confirmation_url_name)
         payload = {
             "email": email,
             "password": password,
@@ -130,4 +132,6 @@ class TestUserSignIn:
         assert_that(created_user.email, equal_to(email))
         assert_that(created_user.is_active, is_(False))
         assert_that(authenticate(username=email, password=password), is_(none()))
-        mail_task.delay.assert_called_once_with(user_id=created_user.id)
+        send_registration_mail_task.delay.assert_called_once_with(
+            email=created_user.email, confirmation_url=confirmation_url
+        )

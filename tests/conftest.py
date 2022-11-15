@@ -5,13 +5,6 @@ from meetupselector.api.api import api
 
 
 @pytest.fixture(scope="session")
-def celery_worker_parameters():
-    return {
-        "perform_ping_check": False,
-    }
-
-
-@pytest.fixture(scope="session")
 def celery_config():
     return {
         "task_always_eager": True,

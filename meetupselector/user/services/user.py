@@ -17,10 +17,10 @@ def login(request: HttpRequest, email: str, password: str) -> AbstractBaseUser |
     return user
 
 
-def create(signin_data: SignInSchema):
+def create(signin_data: SignInSchema, confirmation_url: str):
     new_user = User.objects.create_user(
         email=signin_data.email,
         password=signin_data.password,
         is_active=False,
     )
-    send_registration_mail.delay(user_id=new_user.id)
+    send_registration_mail.delay(email=new_user.email, confirmation_url=confirmation_url)
