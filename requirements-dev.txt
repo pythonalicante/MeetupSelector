@@ -10,6 +10,7 @@ flake8-pydocstyle
 flake8-django
 # PyTest
 pytest
+pytest-celery
 pytest-cov
 pytest-mock
 pytest-django
