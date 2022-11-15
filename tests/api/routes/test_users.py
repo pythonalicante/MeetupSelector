@@ -115,7 +115,7 @@ class TestUserSignIn:
         email = "luke@starwars.com"
         password = "Any_Valid_P4ssw@rd"
         url = reverse_url("create_user")
-        confirmation_url = reverse_url(settings.CONFIRMATION_URL_NAME)
+        confirmation_url_path = reverse_url(settings.CONFIRMATION_URL_NAME)
         payload = {
             "email": email,
             "password": password,
@@ -133,5 +133,6 @@ class TestUserSignIn:
         assert_that(created_user.is_active, is_(False))
         assert_that(authenticate(username=email, password=password), is_(none()))
         send_registration_mail_task.delay.assert_called_once_with(
-            email=created_user.email, confirmation_url=confirmation_url
+            email=created_user.email,
+            confirmation_url=f"http://testserver{confirmation_url_path}",
         )
