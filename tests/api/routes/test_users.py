@@ -1,6 +1,8 @@
 from http import HTTPStatus
+from unittest.mock import patch
 
 import pytest
+from django.conf import settings
 from django.contrib.auth import authenticate
 from hamcrest import (
     assert_that,
@@ -108,10 +110,12 @@ class TestUserSignIn:
         assert_that(str(response.json()), contains_string(expected_error))
         assert_that(users_after_creation, is_(empty()))
 
-    def test_create_user_with_valid_payload(self, client, reverse_url):
+    @patch("meetupselector.user.services.user.send_registration_mail")
+    def test_create_user_with_valid_payload(self, send_registration_mail_task, client, reverse_url):
         email = "luke@starwars.com"
         password = "Any_Valid_P4ssw@rd"
         url = reverse_url("create_user")
+        confirmation_url_path = reverse_url(settings.CONFIRMATION_URL_NAME)
         payload = {
             "email": email,
             "password": password,
@@ -128,3 +132,7 @@ class TestUserSignIn:
         assert_that(created_user.email, equal_to(email))
         assert_that(created_user.is_active, is_(False))
         assert_that(authenticate(username=email, password=password), is_(none()))
+        send_registration_mail_task.delay.assert_called_once_with(
+            email=created_user.email,
+            confirmation_url=f"http://testserver{confirmation_url_path}",
+        )

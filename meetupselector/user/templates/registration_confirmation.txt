@@ -1,0 +1,7 @@
+Welcome to {{ project_name }},
+
+In order to complete your registration, please, confirm your email address by opening the following link in your browser:
+
+{{ confirmation_url }}
+
+Thank you!

@@ -14,8 +14,7 @@ RUN set -ex ;\
 	useradd -U app_user ;\
 	install -d -m 0755 -o app_user -g app_user /app/static ;\
 	rm -rf \
-		/var/lib/apt/lists/* \
-		/tmp
+		/var/lib/apt/lists/*
 
 WORKDIR /app
 USER app_user:app_user

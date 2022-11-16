@@ -5,6 +5,7 @@ from django.http import HttpRequest
 
 from ..models import User
 from ..schemas import SignInSchema
+from ..tasks import send_registration_mail
 
 
 def login(request: HttpRequest, email: str, password: str) -> AbstractBaseUser | None:
@@ -16,9 +17,10 @@ def login(request: HttpRequest, email: str, password: str) -> AbstractBaseUser |
     return user
 
 
-def create(signin_data: SignInSchema):
-    User.objects.create_user(
+def create(signin_data: SignInSchema, confirmation_url: str):
+    new_user = User.objects.create_user(
         email=signin_data.email,
         password=signin_data.password,
         is_active=False,
     )
+    send_registration_mail.delay(email=new_user.email, confirmation_url=confirmation_url)

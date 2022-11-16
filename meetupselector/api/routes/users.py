@@ -1,5 +1,8 @@
 from http import HTTPStatus
 
+from django.conf import settings
+from django.http import HttpRequest
+from django.urls import reverse
 from ninja import Router
 from ninja.security import django_auth
 
@@ -23,5 +26,20 @@ def login(request, credentials: LoginSchema, auth=None):
 
 
 @router.post("/users", response={HTTPStatus.CREATED: None}, url_name="create_user", auth=None)
-def create_user(_, credentials: SignInSchema):
-    return HTTPStatus.CREATED, UserService.create(credentials)
+def create_user(request: HttpRequest, credentials: SignInSchema):
+    api_namespace = settings.API_NAMESPACE
+    confirmation_url_path = reverse(f"{api_namespace}:{settings.CONFIRMATION_URL_NAME}")
+    confirmation_url = request.build_absolute_uri(confirmation_url_path)
+
+    return HTTPStatus.CREATED, UserService.create(credentials, confirmation_url)
+
+
+@router.get(
+    "/signin_confirmation",
+    response={HTTPStatus.OK: None},
+    url_name=settings.CONFIRMATION_URL_NAME,
+    auth=None,
+)
+def activate_user(_):
+    # TODO: Activate user and redirect to main page
+    return HTTPStatus.OK, None
