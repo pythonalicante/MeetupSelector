@@ -2,7 +2,6 @@ from http import HTTPStatus
 from unittest.mock import patch
 
 import pytest
-from attr import has
 from django.conf import settings
 from django.contrib.auth import authenticate
 from hamcrest import (
@@ -10,7 +9,6 @@ from hamcrest import (
     contains_string,
     empty,
     equal_to,
-    has_entry,
     has_length,
     is_,
     is_not,
