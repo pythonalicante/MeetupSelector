@@ -21,6 +21,7 @@ def create(signin_data: SignInSchema, confirmation_url: str):
     new_user = User.objects.create_user(
         email=signin_data.email,
         password=signin_data.password,
+        GDPR_accepted=signin_data.GDPR_accepted,
         is_active=False,
     )
     send_registration_mail.delay(email=new_user.email, confirmation_url=confirmation_url)

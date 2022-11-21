@@ -6,6 +6,7 @@ from pydantic import BaseModel, EmailStr, validator
 class SignInSchema(BaseModel):
     email: EmailStr
     password: str
+    GDPR_accepted: bool
 
     @validator("password")
     def password_validator(cls, value: str) -> str:
