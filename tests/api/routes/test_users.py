@@ -110,15 +110,43 @@ class TestUserSignIn:
         assert_that(str(response.json()), contains_string(expected_error))
         assert_that(users_after_creation, is_(empty()))
 
+    @pytest.mark.parametrize(
+        "GDPR_accepted",
+        [
+            (True),
+            (False),
+        ],
+        ids=[
+            "GDPR_accepted is True",
+            "GDPR_accepted is False",
+        ],
+    )
+    def test_create_user_with_GDPR_accepted(self, client, reverse_url, GDPR_accepted):
+        url = reverse_url("create_user")
+        payload = {
+            "email": "luke@starwars.com",
+            "password": "Any_Valid_P4ssw@rd",
+            "GDPR_accepted": GDPR_accepted,
+        }
+        response = client.post(url, data=payload, content_type="application/json")
+
+        users_after_creation = User.objects.all()
+        assert_that(users_after_creation.first().GDPR_accepted, equal_to(GDPR_accepted))
+        assert_that(users_after_creation.first().email, equal_to("luke@starwars.com"))
+        assert_that(response.status_code, equal_to(HTTPStatus.CREATED))
+        assert_that(users_after_creation, has_length(1))
+
     @patch("meetupselector.user.services.user.send_registration_mail")
     def test_create_user_with_valid_payload(self, send_registration_mail_task, client, reverse_url):
         email = "luke@starwars.com"
         password = "Any_Valid_P4ssw@rd"
+        GDPR_accepted: bool = True
         url = reverse_url("create_user")
         confirmation_url_path = reverse_url(settings.CONFIRMATION_URL_NAME)
         payload = {
             "email": email,
             "password": password,
+            "GDPR_accepted": GDPR_accepted,
         }
         users_before_creation = list(User.objects.all())
 
@@ -130,6 +158,7 @@ class TestUserSignIn:
         assert_that(users_after_creation, has_length(1))
         created_user = users_after_creation.first()
         assert_that(created_user.email, equal_to(email))
+        assert_that(created_user.GDPR_accepted, equal_to(GDPR_accepted))
         assert_that(created_user.is_active, is_(False))
         assert_that(authenticate(username=email, password=password), is_(none()))
         send_registration_mail_task.delay.assert_called_once_with(
