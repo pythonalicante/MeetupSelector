@@ -14,6 +14,7 @@ from hamcrest import (
     is_not,
     none,
 )
+from hamcrest.library.collection import is_empty
 
 from meetupselector.user.models import User
 from tests.utils.builders import UserBuilder
@@ -165,3 +166,57 @@ class TestUserSignIn:
             email=created_user.email,
             confirmation_url=f"http://testserver{confirmation_url_path}",
         )
+
+
+@pytest.mark.django_db
+class TestUserDelete:
+    def test_logged_in_user_can_delete_own_account(self, client, reverse_url):
+        email_account_owner = "user1_registered@user.com"
+        password_account_owner = "Password10!"
+        account_owner = (
+            UserBuilder()
+            .with_email(email_account_owner)
+            .with_password(password_account_owner)
+            .build()
+        )
+
+        url = reverse_url("delete_user", kwargs={"account_id": str(account_owner.pk)})
+        client.login(email=email_account_owner, password=password_account_owner)
+        response = client.delete(url, content_type="application/json")
+        created_users_after_delete = User.objects.all()
+
+        assert_that(response.status_code, equal_to(HTTPStatus.OK))
+        assert_that(created_users_after_delete, is_(empty()))
+
+    def test_not_logged_in_user_cannot_delete__account(self, client, reverse_url):
+        email_user = "user1_registered@user.com"
+        password_user = "Password10!"
+        user = UserBuilder().with_email(email_user).with_password(password_user).build()
+        url = reverse_url("delete_user", kwargs={"account_id": str(user.pk)})
+        response = client.delete(url, content_type="application/json")
+        created_users_after_delete = User.objects.all()
+
+        assert_that(response.status_code, equal_to(HTTPStatus.UNAUTHORIZED))
+        assert_that(created_users_after_delete, has_length(1))
+
+    def test_logged_in_user_cannot_delete_other_account(self, client, reverse_url):
+        account_owner_email = "user1_registered@user.com"
+        account_owner_password = "Password10!"
+
+        account_owner_user = (
+            UserBuilder()
+            .with_email(account_owner_email)
+            .with_password(account_owner_password)
+            .build()
+        )
+
+        url = reverse_url("delete_user", kwargs={"account_id": str(account_owner_user.pk)})
+
+        other_user_email = "user2_registered@user.com"
+        other_user_password = "Password11!"
+        client.login(email=other_user_email, password=other_user_password)
+        response = client.delete(url, content_type="application/json")
+        created_users_after_delete = User.objects.all()
+
+        assert_that(response.status_code, equal_to(HTTPStatus.UNAUTHORIZED))
+        assert_that(created_users_after_delete, has_length(1))
