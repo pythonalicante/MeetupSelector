@@ -1,7 +1,11 @@
-from django.contrib.auth import authenticate
+from http import HTTPStatus
+
+from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth import login as django_login
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.http import HttpRequest
+from django.http import Http404, HttpRequest
+from django.utils.translation import gettext_lazy as _
+from pydantic import UUID4
 
 from ..models import User
 from ..schemas import SignInSchema
@@ -25,3 +29,23 @@ def create(signin_data: SignInSchema, confirmation_url: str):
         is_active=False,
     )
     send_registration_mail.delay(email=new_user.email, confirmation_url=confirmation_url)
+
+
+def delete(account_id: UUID4, user_id: UUID4):
+    """Delete user account.
+
+    :param account_id:
+    :type account_id: UUID4
+    :param user_id:
+    :type user_id: UUID4
+    """
+    User = get_user_model()
+
+    if account_id == user_id:
+        try:
+            user = User.objects.get(pk=user_id)
+            user.delete()
+            return 200
+        except User.DoesNotExist as e:
+            raise Http404(_("User not found"))
+    return HTTPStatus.UNAUTHORIZED, None
