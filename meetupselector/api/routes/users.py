@@ -48,10 +48,10 @@ def activate_user(_):
 
 
 @router.delete(
-    "/delete_user/{account_id}",
+    "/",
     response={HTTPStatus.OK: None, HTTPStatus.NOT_FOUND: None, HTTPStatus.UNAUTHORIZED: None},
-    url_name="delete_user",
+    url_name="/",
 )
-def delete_user(request, account_id: UUID4):
+def delete_user(request):
     user = request.auth
-    return UserService.delete(account_id=account_id, user_id=user.id)
+    return UserService.delete(user_id=user.id)
