@@ -31,7 +31,7 @@ def create(signin_data: SignInSchema, confirmation_url: str):
     send_registration_mail.delay(email=new_user.email, confirmation_url=confirmation_url)
 
 
-def delete(account_id: UUID4, user_id: UUID4):
+def delete(user_id: UUID4):
     """Delete user account.
 
     :param account_id:
@@ -41,11 +41,9 @@ def delete(account_id: UUID4, user_id: UUID4):
     """
     User = get_user_model()
 
-    if account_id == user_id:
-        try:
-            user = User.objects.get(pk=user_id)
-            user.delete()
-            return 200
-        except User.DoesNotExist as e:
-            raise Http404(_("User not found"))
-    return HTTPStatus.UNAUTHORIZED, None
+    try:
+        user = User.objects.get(pk=user_id)
+        user.delete()
+        return 200
+    except User.DoesNotExist as e:
+        raise Http404(_("User not found"))
