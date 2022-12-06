@@ -1,5 +1,3 @@
-from http import HTTPStatus
-
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth import login as django_login
 from django.contrib.auth.base_user import AbstractBaseUser
@@ -32,13 +30,6 @@ def create(signin_data: SignInSchema, confirmation_url: str):
 
 
 def delete(user_id: UUID4):
-    """Delete user account.
-
-    :param account_id:
-    :type account_id: UUID4
-    :param user_id:
-    :type user_id: UUID4
-    """
     User = get_user_model()
 
     try:
