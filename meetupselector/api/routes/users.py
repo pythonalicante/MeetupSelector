@@ -3,10 +3,8 @@ from http import HTTPStatus
 from django.conf import settings
 from django.http import HttpRequest
 from django.urls import reverse
-from kombu.utils.functional import accepts_argument
 from ninja import Router
 from ninja.security import django_auth
-from pydantic import UUID4
 
 from meetupselector.api.schemas.users import LoginSchema
 from meetupselector.user.schemas import SignInSchema
