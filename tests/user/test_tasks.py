@@ -18,7 +18,7 @@ class TestSendRegistrationEmail:
         self, send_templated_email, reverse_url
     ):
         user = UserBuilder().with_email("some@email.xxx").with_password("aaa").build()
-        confirmation_url = reverse_url(settings.CONFIRMATION_URL_NAME)
+        confirmation_url = reverse_url(settings.CONFIRMATION_URL_NAME, {"user_id": str(user.id)})
         expected_context = {
             "project_name": "my_fancy_project",
             "confirmation_url": confirmation_url,

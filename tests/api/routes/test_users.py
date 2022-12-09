@@ -9,10 +9,13 @@ from hamcrest import (
     contains_string,
     empty,
     equal_to,
+    has_entry,
+    has_key,
     has_length,
     is_,
     is_not,
     none,
+    not_,
 )
 
 from meetupselector.user.models import User
@@ -142,14 +145,12 @@ class TestUserSignIn:
         password = "Any_Valid_P4ssw@rd"
         GDPR_accepted: bool = True
         url = reverse_url("create_user")
-        confirmation_url_path = reverse_url(settings.CONFIRMATION_URL_NAME)
         payload = {
             "email": email,
             "password": password,
             "GDPR_accepted": GDPR_accepted,
         }
         users_before_creation = list(User.objects.all())
-        confirmation_url = f"http://testserver{confirmation_url_path}"
 
         response = client.post(url, data=payload, content_type="application/json")
 
@@ -158,6 +159,10 @@ class TestUserSignIn:
         assert_that(users_before_creation, is_(empty()))
         assert_that(users_after_creation, has_length(1))
         created_user = users_after_creation.first()
+        confirmation_url_path = reverse_url(
+            settings.CONFIRMATION_URL_NAME, {"user_id": str(created_user.id)}
+        )
+        confirmation_url = f"http://testserver{confirmation_url_path}"
         assert_that(created_user.email, equal_to(email))
         assert_that(created_user.GDPR_accepted, equal_to(GDPR_accepted))
         assert_that(created_user.is_active, is_(False))
@@ -166,6 +171,29 @@ class TestUserSignIn:
             email=created_user.email,
             confirmation_url=f"{confirmation_url}/{str(created_user.id)}",
         )
+
+    def test_user_account_confirmation(self, client, reverse_url):
+        user = UserBuilder().with_is_active(False).build()
+        url = f"http://testserver/api/users/signin_confirmation/{str(user.id)}"
+
+        response = client.get(url)
+
+        assert_that(user.is_active, is_(False))
+        user.refresh_from_db()
+        assert_that(user.is_active, is_(True))
+        assert_that(response.headers, has_entry("Location", "http://testserver/"))
+        assert_that(response.status_code, equal_to(HTTPStatus.FOUND))
+
+    def test_user_account_confirmation_user_not_found(self, client, reverse_url):
+        user = UserBuilder().with_is_active(False).build()
+        url = "http://testserver/api/users/signin_confirmation/wrong_uid"
+
+        response = client.get(url)
+
+        user.refresh_from_db()
+        assert_that(user.is_active, is_(False))
+        assert_that(response.headers, not_(has_key("Location")))
+        assert_that(response.status_code, equal_to(HTTPStatus.NOT_FOUND))
 
 
 @pytest.mark.django_db
