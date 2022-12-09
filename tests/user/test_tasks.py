@@ -27,7 +27,7 @@ class TestSendRegistrationEmail:
         task_handle = send_registration_mail.delay(user.email, confirmation_url)
         task_handle.get()
 
-        send_templated_email.assert_called_once_with(
+        send_templated_email.assert_called_with(
             recipients=[user.email],
             subject="Confirm your registration",
             template_name="registration_confirmation",
