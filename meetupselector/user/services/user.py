@@ -1,3 +1,5 @@
+from urllib.parse import urljoin
+
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth import login as django_login
 from django.contrib.auth.base_user import AbstractBaseUser
@@ -26,6 +28,7 @@ def create(signin_data: SignInSchema, confirmation_url: str):
         GDPR_accepted=signin_data.GDPR_accepted,
         is_active=False,
     )
+    confirmation_url = urljoin(f"{confirmation_url}/", str(new_user.id))
     send_registration_mail.delay(email=new_user.email, confirmation_url=confirmation_url)
 
 
@@ -36,5 +39,5 @@ def delete(user_id: UUID4):
         user = User.objects.get(pk=user_id)
         user.delete()
         return 200
-    except User.DoesNotExist as e:
+    except User.DoesNotExist:
         raise Http404(_("User not found"))

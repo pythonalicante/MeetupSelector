@@ -14,7 +14,6 @@ from hamcrest import (
     is_not,
     none,
 )
-from hamcrest.library.collection import is_empty
 
 from meetupselector.user.models import User
 from tests.utils.builders import UserBuilder
@@ -150,6 +149,7 @@ class TestUserSignIn:
             "GDPR_accepted": GDPR_accepted,
         }
         users_before_creation = list(User.objects.all())
+        confirmation_url = f"http://testserver{confirmation_url_path}"
 
         response = client.post(url, data=payload, content_type="application/json")
 
@@ -164,7 +164,7 @@ class TestUserSignIn:
         assert_that(authenticate(username=email, password=password), is_(none()))
         send_registration_mail_task.delay.assert_called_once_with(
             email=created_user.email,
-            confirmation_url=f"http://testserver{confirmation_url_path}",
+            confirmation_url=f"{confirmation_url}/{str(created_user.id)}",
         )
 
 
@@ -173,7 +173,7 @@ class TestUserDelete:
     def test_logged_in_user_can_delete_own_account(self, client, reverse_url):
         email_account_owner = "user1_registered@user.com"
         password_account_owner = "Password10!"
-        account_owner = (
+        (
             UserBuilder()
             .with_email(email_account_owner)
             .with_password(password_account_owner)
@@ -191,7 +191,7 @@ class TestUserDelete:
     def test_not_logged_in_user_cannot_delete__account(self, client, reverse_url):
         email_user = "user1_registered@user.com"
         password_user = "Password10!"
-        user = UserBuilder().with_email(email_user).with_password(password_user).build()
+        UserBuilder().with_email(email_user).with_password(password_user).build()
         url = reverse_url("/")
         response = client.delete(url, content_type="application/json")
         created_users_after_delete = User.objects.all()
