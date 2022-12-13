@@ -10,6 +10,7 @@ class UserBuilder:
     _is_superuser: bool = False
     _date_joined: datetime = datetime.now()
     _password: str = "Password10!"
+    _is_active: bool = True
 
     def with_email(self, email) -> "UserBuilder":
         self._email = email
@@ -35,6 +36,10 @@ class UserBuilder:
         self._password = password
         return self
 
+    def with_is_active(self, is_active: bool) -> "UserBuilder":
+        self._is_active = is_active
+        return self
+
     def build(self) -> User:
         return User.objects.create_user(
             email=self._email,
@@ -43,4 +48,5 @@ class UserBuilder:
             is_staff=self._is_staff,
             is_superuser=self._is_superuser,
             date_joined=self._date_joined,
+            is_active=self._is_active,
         )

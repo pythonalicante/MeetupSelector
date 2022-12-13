@@ -9,12 +9,14 @@ from hamcrest import (
     contains_string,
     empty,
     equal_to,
+    has_entry,
+    has_key,
     has_length,
     is_,
     is_not,
     none,
+    not_,
 )
-from hamcrest.library.collection import is_empty
 
 from meetupselector.user.models import User
 from tests.utils.builders import UserBuilder
@@ -143,7 +145,6 @@ class TestUserSignIn:
         password = "Any_Valid_P4ssw@rd"
         GDPR_accepted: bool = True
         url = reverse_url("create_user")
-        confirmation_url_path = reverse_url(settings.CONFIRMATION_URL_NAME)
         payload = {
             "email": email,
             "password": password,
@@ -158,14 +159,41 @@ class TestUserSignIn:
         assert_that(users_before_creation, is_(empty()))
         assert_that(users_after_creation, has_length(1))
         created_user = users_after_creation.first()
+        confirmation_url_path = reverse_url(
+            settings.CONFIRMATION_URL_NAME, {"user_id": str(created_user.id)}
+        )
+        confirmation_url = f"http://testserver{confirmation_url_path}"
         assert_that(created_user.email, equal_to(email))
         assert_that(created_user.GDPR_accepted, equal_to(GDPR_accepted))
         assert_that(created_user.is_active, is_(False))
         assert_that(authenticate(username=email, password=password), is_(none()))
         send_registration_mail_task.delay.assert_called_once_with(
             email=created_user.email,
-            confirmation_url=f"http://testserver{confirmation_url_path}",
+            confirmation_url=f"{confirmation_url}/{str(created_user.id)}",
         )
+
+    def test_user_account_confirmation(self, client, reverse_url):
+        user = UserBuilder().with_is_active(False).build()
+        url = f"http://testserver/api/users/signin_confirmation/{str(user.id)}"
+
+        response = client.get(url)
+
+        assert_that(user.is_active, is_(False))
+        user.refresh_from_db()
+        assert_that(user.is_active, is_(True))
+        assert_that(response.headers, has_entry("Location", "http://testserver/"))
+        assert_that(response.status_code, equal_to(HTTPStatus.FOUND))
+
+    def test_user_account_confirmation_user_not_found(self, client, reverse_url):
+        user = UserBuilder().with_is_active(False).build()
+        url = "http://testserver/api/users/signin_confirmation/wrong_uid"
+
+        response = client.get(url)
+
+        user.refresh_from_db()
+        assert_that(user.is_active, is_(False))
+        assert_that(response.headers, not_(has_key("Location")))
+        assert_that(response.status_code, equal_to(HTTPStatus.NOT_FOUND))
 
 
 @pytest.mark.django_db
@@ -173,7 +201,7 @@ class TestUserDelete:
     def test_logged_in_user_can_delete_own_account(self, client, reverse_url):
         email_account_owner = "user1_registered@user.com"
         password_account_owner = "Password10!"
-        account_owner = (
+        (
             UserBuilder()
             .with_email(email_account_owner)
             .with_password(password_account_owner)
@@ -191,7 +219,7 @@ class TestUserDelete:
     def test_not_logged_in_user_cannot_delete__account(self, client, reverse_url):
         email_user = "user1_registered@user.com"
         password_user = "Password10!"
-        user = UserBuilder().with_email(email_user).with_password(password_user).build()
+        UserBuilder().with_email(email_user).with_password(password_user).build()
         url = reverse_url("/")
         response = client.delete(url, content_type="application/json")
         created_users_after_delete = User.objects.all()
