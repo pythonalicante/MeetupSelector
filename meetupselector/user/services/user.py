@@ -6,8 +6,8 @@ from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth import login as django_login
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.http import Http404, HttpRequest
-from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from pydantic import UUID4
 
 from ..models import User

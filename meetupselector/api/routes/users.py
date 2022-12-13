@@ -35,7 +35,6 @@ def create_user(request: HttpRequest, credentials: SignInSchema):
     url_name=settings.CONFIRMATION_URL_NAME,
     auth=None,
 )
-
 def activate_user(request: HttpRequest, user_id: str, response: HttpResponse):
     user = UserService.activate(user_id)
     if user is None:
