@@ -43,3 +43,13 @@ def create_user(request: HttpRequest, credentials: SignInSchema):
 def activate_user(_):
     # TODO: Activate user and redirect to main page
     return HTTPStatus.OK, None
+
+
+@router.delete(
+    "/",
+    response={HTTPStatus.OK: None, HTTPStatus.NOT_FOUND: None, HTTPStatus.UNAUTHORIZED: None},
+    url_name="/",
+)
+def delete_user(request):
+    user = request.auth
+    return UserService.delete(user_id=user.id)
