@@ -7,8 +7,13 @@ from django.contrib.auth import login as django_login
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.http import Http404, HttpRequest
 from django.urls import reverse
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 from django.utils.translation import gettext_lazy as _
 from pydantic import UUID4
+
+from meetupselector.user.tasks import send_registration_mail, send_reset_password_email
+from meetupselector.user.token import token_generator
 
 from ..models import User
 from ..schemas import SignInSchema
@@ -63,3 +68,31 @@ def activate(user_id: str) -> User | None:
         user.is_active = True
         user.save()
     return user
+
+
+def reset_password_email(email: str):
+    User = get_user_model()
+
+    try:
+        user = User.objects.get(email=email)
+        send_reset_password_email(user.pk)
+        return 200
+    except User.DoesNotExist as e:
+        raise Http404(_("User not found"))
+
+
+def reset_password(uidb64, token, new_password):
+    User = get_user_model()
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and token_generator.check_token(user, token):
+
+        user.set_password(new_password)
+        user.save()
+        return 200
+    else:
+        raise Http404(_("User not found"))

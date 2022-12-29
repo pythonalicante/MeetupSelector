@@ -23,6 +23,7 @@ DEBUG = config("DJANGO_DEBUG", default=False, cast=bool)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 PROJECT_NAME = config("PROJECT_NAME", default="MeetUpSelector")
+SITE_DOMAIN = config("SITE_DOMAIN", default="MeetUpSelector.com")  # No trailing '/'
 
 
 ALLOWED_HOSTS: list[str] = []

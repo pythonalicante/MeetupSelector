@@ -21,3 +21,11 @@ class SignInSchema(BaseModel):
                 raise ValueError(msg_error)
 
         return value
+
+
+class ResetPasswordSchema(BaseModel):
+    email: EmailStr
+
+
+class UserPasswordChangeSchema(BaseModel):
+    new_password: str

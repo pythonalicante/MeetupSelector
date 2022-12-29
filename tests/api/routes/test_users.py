@@ -4,6 +4,8 @@ from unittest.mock import patch
 import pytest
 from django.conf import settings
 from django.contrib.auth import authenticate
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from hamcrest import (
     assert_that,
     contains_string,
@@ -19,6 +21,7 @@ from hamcrest import (
 )
 
 from meetupselector.user.models import User
+from meetupselector.user.token import token_generator
 from tests.utils.builders import UserBuilder
 
 
@@ -226,3 +229,117 @@ class TestUserDelete:
 
         assert_that(response.status_code, equal_to(HTTPStatus.UNAUTHORIZED))
         assert_that(created_users_after_delete, has_length(1))
+
+
+@pytest.mark.django_db
+class TestResetUserPassword:
+    def test_send_email_to_reset_password_for_registered_account(
+        self,
+        client,
+        reverse_url,
+    ):
+        email = "user1_registered@user.com"
+        old_password = "Password10!"
+        user = (
+            UserBuilder().with_email(email).with_password(old_password).with_is_active(True).build()
+        )
+        payload = {
+            "email": user.email,
+        }
+        url = reverse_url("reset_password_link")
+        response = client.post(url, data=payload, content_type="application/json")
+
+        assert_that(response.status_code, equal_to(HTTPStatus.OK))
+
+    def test_send_email_to_reset_password_with_unregistered_email_address(
+        self,
+        reverse_url,
+        client,
+    ):
+        email = "user1_registered@user.com"
+        payload = {
+            "email": email,
+        }
+        url = reverse_url("reset_password_link")
+        response = client.post(url, data=payload, content_type="application/json")
+
+        assert_that(response.status_code, equal_to(HTTPStatus.NOT_FOUND))
+
+    def test_generated_url_returns_password_reset_url(
+        self,
+        reverse_url,
+        client,
+    ):
+        email = "user1_registered@user.com"
+        old_password = "Password10!"
+        new_password = "New_Password10!"
+        user = (
+            UserBuilder().with_email(email).with_password(old_password).with_is_active(True).build()
+        )
+
+        token = token_generator.make_token(user)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        payload = {
+            "new_password": new_password,
+        }
+
+        url = reverse_url(
+            "reset_password",
+            kwargs={"uidb64": uid, "token": token},
+        )
+        response = client.post(url, data=payload, content_type="application/json")
+
+        user_with_new_password = authenticate(email=email, password=new_password)
+        user_with_old_password = authenticate(email=email, password=old_password)
+
+        assert_that(response.status_code, equal_to(HTTPStatus.OK))
+        assert_that(user_with_new_password is not None)
+        assert_that(user_with_new_password.id, equal_to(user.pk))
+        assert_that(user_with_old_password is None)
+
+    def test_bad_url_fails_to_reset_password_reset_url(
+        self,
+        reverse_url,
+        client,
+    ):
+        email = "user1_registered@user.com"
+        old_password = "Password10!"
+        new_password = "New_Password10!"
+        user = (
+            UserBuilder().with_email(email).with_password(old_password).with_is_active(True).build()
+        )
+
+        user_2_email = "user2_registered@user.com"
+        user_2_password = "password10!"
+        user_2 = (
+            UserBuilder()
+            .with_email(user_2_email)
+            .with_password(user_2_password)
+            .with_is_active(True)
+            .build()
+        )
+
+        token = token_generator.make_token(user_2)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        payload = {
+            "new_password": new_password,
+        }
+
+        url = reverse_url(
+            "reset_password",
+            kwargs={"uidb64": uid, "token": token},
+        )
+        response = client.post(url, data=payload, content_type="application/json")
+
+        user_with_old_password = authenticate(email=email, password=old_password)
+        user_with_new_password = authenticate(email=email, password=new_password)
+
+        user_2_with_old_password = authenticate(email=user_2_email, password=user_2_password)
+        user_2_with_new_password = authenticate(email=user_2_email, password=new_password)
+
+        assert_that(response.status_code, equal_to(HTTPStatus.NOT_FOUND))
+
+        assert_that(user_with_new_password is None)
+        assert_that(user_with_old_password is not None)
+        assert_that(user_2_with_old_password is not None)
+        assert_that(user_2_with_new_password is None)

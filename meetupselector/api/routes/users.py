@@ -6,7 +6,11 @@ from ninja import Router
 from ninja.security import django_auth
 
 from meetupselector.api.schemas.users import LoginSchema
-from meetupselector.user.schemas import SignInSchema
+from meetupselector.user.schemas import (
+    ResetPasswordSchema,
+    SignInSchema,
+    UserPasswordChangeSchema,
+)
 from meetupselector.user.services import UserService
 
 router = Router(auth=django_auth)
@@ -54,3 +58,23 @@ def activate_user(request: HttpRequest, user_id: str, response: HttpResponse):
 def delete_user(request):
     user = request.auth
     return UserService.delete(user_id=user.id)
+
+
+@router.post(
+    "/reset_password_link",
+    response={HTTPStatus.OK: None, HTTPStatus.NOT_FOUND: None, HTTPStatus.UNAUTHORIZED: None},
+    url_name="reset_password_link",
+    auth=None,
+)
+def reset_password_email(_, credentials: ResetPasswordSchema):
+    return UserService.reset_password_email(email=credentials.email)
+
+
+@router.post(
+    "/reset_password/{uidb64}/{token}",
+    url_name="reset_password",
+    response={HTTPStatus.OK: None, HTTPStatus.NOT_FOUND: None, HTTPStatus.UNAUTHORIZED: None},
+    auth=None,
+)
+def reset_password(_, uidb64, token, data: UserPasswordChangeSchema):
+    return UserService.reset_password(uidb64, token, new_password=data.new_password)
