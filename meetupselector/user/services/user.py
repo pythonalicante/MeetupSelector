@@ -12,12 +12,9 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.translation import gettext_lazy as _
 from pydantic import UUID4
 
-from meetupselector.user.tasks import send_registration_mail, send_reset_password_email
-from meetupselector.user.token import token_generator
-
 from ..models import User
-from ..schemas import SignInSchema
-from ..tasks import send_registration_mail
+from ..tasks import send_registration_mail, send_reset_password_email
+from ..token import token_generator
 
 
 def login(request: HttpRequest, email: str, password: str) -> AbstractBaseUser | None:
@@ -29,11 +26,11 @@ def login(request: HttpRequest, email: str, password: str) -> AbstractBaseUser |
     return user
 
 
-def create(signin_data: SignInSchema, request: HttpRequest):
+def create(email: str, password: str, GDPR_accepted: bool, request: HttpRequest):
     new_user = User.objects.create_user(
-        email=signin_data.email,
-        password=signin_data.password,
-        GDPR_accepted=signin_data.GDPR_accepted,
+        email=email,
+        password=password,
+        GDPR_accepted=GDPR_accepted,
         is_active=False,
     )
     api_namespace = settings.API_NAMESPACE
@@ -90,7 +87,6 @@ def reset_password(uidb64, token, new_password):
         user = None
 
     if user is not None and token_generator.check_token(user, token):
-
         user.set_password(new_password)
         user.save()
         return 200
