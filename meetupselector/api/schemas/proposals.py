@@ -43,6 +43,7 @@ class ProposalRetrieveSchema(ModelSchema):
 
 class ProposalListSchema(ModelSchema):
     topics: list[TopicRetrieveSchema]
+    likes: int = Field(default=0, alias="likes", read_only=True)
 
     class Config:
         model = Proposal
