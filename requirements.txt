@@ -1,15 +1,15 @@
 Django
-psycopg2-binary==2.9.3
-gunicorn==20.1.0
-django-cors-headers==3.11.0
-uritemplate==4.1.1
-django-filter==22.1
+psycopg2-binary
+gunicorn
+django-cors-headers
+uritemplate
+django-filter
 pyyaml
 toml
 python-decouple
 # Backgroud
-redis==4.3.1
-celery==5.2.2
-django-celery-beat==2.2.1
-django_ninja==0.19.1
+redis
+celery
+django-celery-beat
+django_ninja
 pydantic[email]
