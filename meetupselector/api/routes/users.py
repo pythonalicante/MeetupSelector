@@ -5,10 +5,10 @@ from django.http import HttpRequest, HttpResponse
 from ninja import Router
 from ninja.security import django_auth
 
-from meetupselector.api.schemas.users import LoginSchema
-from meetupselector.user.schemas import (
+from meetupselector.api.schemas.users import (
+    LoginSchema,
     ResetPasswordSchema,
-    SignInSchema,
+    SignUpSchema,
     UserPasswordChangeSchema,
 )
 from meetupselector.user.services import UserService
@@ -29,12 +29,17 @@ def login(request, credentials: LoginSchema, auth=None):
 
 
 @router.post("/users", response={HTTPStatus.CREATED: None}, url_name="create_user", auth=None)
-def create_user(request: HttpRequest, credentials: SignInSchema):
-    return HTTPStatus.CREATED, UserService.create(credentials, request)
+def create_user(request: HttpRequest, credentials: SignUpSchema):
+    return HTTPStatus.CREATED, UserService.create(
+        email=credentials.email,
+        password=credentials.password,
+        GDPR_accepted=credentials.GDPR_accepted,
+        request=request,
+    )
 
 
 @router.get(
-    "/signin_confirmation/{user_id}",
+    "/signup_confirmation/{user_id}",
     response={HTTPStatus.FOUND: None} | {HTTPStatus.NOT_FOUND: None},
     url_name=settings.CONFIRMATION_URL_NAME,
     auth=None,
