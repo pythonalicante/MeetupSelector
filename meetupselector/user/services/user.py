@@ -74,7 +74,7 @@ def reset_password_email(email: str):
         user = User.objects.get(email=email)
         send_reset_password_email(user.pk)
         return 200
-    except User.DoesNotExist as e:
+    except User.DoesNotExist:
         raise Http404(_("User not found"))
 
 

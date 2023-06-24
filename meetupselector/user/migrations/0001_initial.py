@@ -8,7 +8,6 @@ import meetupselector.user.models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [

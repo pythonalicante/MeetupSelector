@@ -61,12 +61,12 @@ class Proposal(models.Model):
         verbose_name = _("proposal")
         verbose_name_plural = _("proposals")
 
+    def __str__(self) -> str:
+        return self.subject
+
     @property
     def likes(self):
         return self.liked_by.all().count()
-
-    def __str__(self) -> str:
-        return self.subject
 
 
 class Event(models.Model):

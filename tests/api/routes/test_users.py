@@ -74,7 +74,6 @@ class TestUserLogin:
 
 @pytest.mark.django_db
 class TestUserSignIn:
-
     password_error_msg = (
         "password requirements: min. length of 8 chars, "
         "one uppercase char, one lowercase char, one digit, "
@@ -177,9 +176,12 @@ class TestUserSignIn:
 
     def test_user_account_confirmation(self, client, reverse_url):
         user = UserBuilder().with_is_active(False).build()
-        url = f"http://testserver/api/users/signin_confirmation/{str(user.id)}"
+        confirmation_url_path = reverse_url(
+            settings.CONFIRMATION_URL_NAME, {"user_id": str(user.id)}
+        )
+        confirmation_url = f"http://testserver{confirmation_url_path}"
 
-        response = client.get(url)
+        response = client.get(confirmation_url)
 
         assert_that(user.is_active, is_(False))
         user.refresh_from_db()
