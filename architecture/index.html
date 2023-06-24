@@ -9,17 +9,17 @@
       
       
       
-        <link rel="prev" href="../architecture/">
+        <link rel="prev" href="../roadmap/">
       
       
-        <link rel="next" href="license/">
+        <link rel="next" href="../about_us/">
       
       <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.9">
     
     
       
-        <title>About - Meetup Selector</title>
+        <title>Architecture - Meetup Selector</title>
       
     
     
@@ -73,7 +73,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#about" class="md-skip">
+        <a href="#architecture" class="md-skip">
           Skip to content
         </a>
       
@@ -105,7 +105,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              About
+              Architecture
             
           </span>
         </div>
@@ -243,22 +243,6 @@
         
   
   
-
-
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../architecture/" class="md-tabs__link">
-        Architecture
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
     
   
 
@@ -268,6 +252,22 @@
   
     <li class="md-tabs__item">
       <a href="./" class="md-tabs__link md-tabs__link--active">
+        Architecture
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../about_us/" class="md-tabs__link">
         About
       </a>
     </li>
@@ -452,16 +452,16 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
       
       
-        
-      
-      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
       
       
         
@@ -473,12 +473,12 @@
       
         
         
-        <div class="md-nav__link md-nav__link--index ">
-          <a href="../architecture/">Architecture</a>
+        <div class="md-nav__link md-nav__link--index md-nav__link--active">
+          <a href="./">Architecture</a>
           
         </div>
       
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
         <label class="md-nav__title" for="__nav_4">
           <span class="md-nav__icon md-icon"></span>
           Architecture
@@ -499,16 +499,16 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
       
       
         
@@ -524,8 +524,8 @@
       
         
         
-        <div class="md-nav__link md-nav__link--index md-nav__link--active">
-          <a href="./">About</a>
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../about_us/">About</a>
           
             <label for="__nav_5">
               <span class="md-nav__icon md-icon"></span>
@@ -533,7 +533,7 @@
           
         </div>
       
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_5">
           <span class="md-nav__icon md-icon"></span>
           About
@@ -548,7 +548,7 @@
   
   
     <li class="md-nav__item">
-      <a href="license/" class="md-nav__link">
+      <a href="../about_us/license/" class="md-nav__link">
         License
       </a>
     </li>
@@ -562,7 +562,7 @@
   
   
     <li class="md-nav__item">
-      <a href="releases/" class="md-nav__link">
+      <a href="../about_us/releases/" class="md-nav__link">
         Releases
       </a>
     </li>
@@ -603,15 +603,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#meetupselector" class="md-nav__link">
-    MeetupSelector
+  <a href="#architecture-c4-diagram" class="md-nav__link">
+    Architecture (C4) diagram
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#python-alicante" class="md-nav__link">
-    Python Alicante
+  <a href="#use-cases-diagram" class="md-nav__link">
+    Use Cases diagram
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#entity-relation-diagram" class="md-nav__link">
+    Entity Relation diagram
   </a>
   
 </li>
@@ -634,11 +641,14 @@
   
 
 
-<h1 id="about">About</h1>
-<h2 id="meetupselector">MeetupSelector</h2>
-<p>This project is meant to be a landing page for the Python Alicante community and a like-system to organize MeetUps. It allows the community members to propose Meetup topics and also to propose themselves as speakers.</p>
-<h2 id="python-alicante">Python Alicante</h2>
-<p>Local community of Python from Alicante, Spain</p>
+<h1 id="architecture">Architecture</h1>
+<p>In this section, it's described the architecture of the project.</p>
+<h2 id="architecture-c4-diagram">Architecture (C4) diagram</h2>
+<p><img alt="architecture-alt" src="../diagrams/out/architecture.png" /></p>
+<h2 id="use-cases-diagram">Use Cases diagram</h2>
+<p><img alt="use-cases-alt" src="../diagrams/out/use_cases.png" /></p>
+<h2 id="entity-relation-diagram">Entity Relation diagram</h2>
+<p><img alt="entity-relation-alt" src="../diagrams/out/entity-relation.png" /></p>
 
 
 
