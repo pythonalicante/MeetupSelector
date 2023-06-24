@@ -67,6 +67,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = _("user")
         verbose_name_plural = _("users")
 
+    def __str__(self):
+        return self.email
+
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this User."""
         send_mail(
@@ -76,6 +79,3 @@ class User(AbstractBaseUser, PermissionsMixin):
             recipient_list=[self.email],
             **kwargs,
         )
-
-    def __str__(self):
-        return self.email

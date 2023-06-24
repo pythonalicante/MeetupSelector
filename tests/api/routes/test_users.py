@@ -74,7 +74,6 @@ class TestUserLogin:
 
 @pytest.mark.django_db
 class TestUserSignIn:
-
     password_error_msg = (
         "password requirements: min. length of 8 chars, "
         "one uppercase char, one lowercase char, one digit, "

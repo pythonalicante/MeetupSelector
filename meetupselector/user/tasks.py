@@ -32,12 +32,8 @@ def send_reset_password_email(_, user_id: str):
     app_name = settings.PROJECT_NAME
     user = User.objects.get(pk=user_id)
     reset_password_link = (
-        "http://"
-        + domain_name
-        + "/api/users/reset_password/"
-        + urlsafe_base64_encode(force_bytes(user.pk))
-        + "/"
-        + token_generator.make_token(user)
+        f"http://{domain_name}/api/users/reset_password/"
+        f"{urlsafe_base64_encode(force_bytes(user.pk))}/{token_generator.make_token(user)}"
     )
     context = {
         "user": user.email,
