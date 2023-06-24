@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user', '0002_auto_20221101_1033'),
+        ("user", "0002_auto_20221101_1033"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='GDPR_accepted',
-            field=models.BooleanField(default=False, verbose_name='GDPR_accepted'),
+            model_name="user",
+            name="GDPR_accepted",
+            field=models.BooleanField(default=False, verbose_name="GDPR_accepted"),
         ),
     ]
